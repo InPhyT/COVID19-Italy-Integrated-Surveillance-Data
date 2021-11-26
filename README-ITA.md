@@ -2,7 +2,7 @@
   Dati Sorveglianza Integrata COVID-19 in Italia 
 </h1> 
 
-[![language-italian](https://img.shields.io/badge/Language-english-red.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README.md) [![language-italian](https://img.shields.io/badge/Language-italian-blue.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README-ITA.md) [![License: CC-BY-SA 4.0](https://img.shields.io/badge/License-CC BY SA 4.0-green.svg)](https://github.com/InPhyT/UnrollingAverages.jl/blob/main/LICENSE)
+[![language-italian](https://img.shields.io/badge/Language-english-red.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README.md) [![language-italian](https://img.shields.io/badge/Language-italian-blue.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README-ITA.md) [![License: CC-BY-SA 4.0](https://img.shields.io/badge/License-CC BY SA 4.0-green.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/LICENSE)
 
 Ogni settimana l'Istituto Nazionale di Fisica Nucleare ([INFN](https://home.infn.it/it/)) importa un dataset anonimo a livello individuale dall'Istituto Superiore di Sanità ([ISS](https://www.iss.it)) e lo converte in serie temporali di incidenza organizzate per data di evento e disaggregate per sesso, età e livello amministrativo con un periodo di consolidamento di circa due settimane. L'informazione disponibile all'[INFN](https://home.infn.it/it/) è riassunta nella seguente [meta-tabella](https://covid19.infn.it/iss/campi-iss.pdf):
 
