@@ -1,6 +1,7 @@
 <h1 align="center">
   COVID-19 Integrated Surveillance Data in Italy
 </h1> 
+
 [![language-italian](https://img.shields.io/badge/language-italian-blue.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README-ITA.md) [![language-english](https://img.shields.io/badge/language-english-red.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README.md)
 
 Every week the National Institute for Nuclear Physics ([INFN](https://home.infn.it/it/)) imports an anonymous individual-level dataset from the Italian National Institute of Health ([ISS](https://www.iss.it)) and converts it into an incidence time series data organized by date of event and disaggregated by sex, age and administrative level with a consolidation period of approximately two weeks. The information available to the [INFN](https://home.infn.it/it/) is summarised in the following [meta-table](https://covid19.infn.it/iss/campi-iss.pdf):
@@ -142,8 +143,16 @@ If you wish to change or add some functionality, please file an [issue](https://
 
 If you use this data in your work, please cite this repository using the following metadata: 
 
-```
-.BIB FILE
+```bib
+@dataset{COVID19-Italy-Integrated-Surveillance-Data,
+	author   = {Pietro Monticone, Claudio Moroni},
+	title    = {COVID-19 Integrated Surveillance Data in Italy},
+	url      = {https://doi.org/},
+	doi      = {}, 
+	keywords = {Epidemiology, Surveillance, Data, Data Analysis, COVID-19},
+	year     = {2021},
+	month    = {11}
+}
 ```
 
 ## Data Source

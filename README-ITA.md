@@ -144,8 +144,16 @@ Se volete modificare o aggiungere qualche funzionalità siete pregati di aprire 
 
 Se usate questi dati nel vostro lavoro siete pregati di citare questo repository usando i seguenti metadati: 
 
-```
-.BIB FILE
+```bib
+@dataset{COVID19-Italy-Integrated-Surveillance-Data,
+	author   = {Pietro Monticone, Claudio Moroni},
+	title    = {COVID-19 Integrated Surveillance Data in Italy},
+	url      = {https://doi.org/},
+	doi      = {}, 
+	keywords = {Epidemiology, Surveillance, Data, Data Analysis, COVID-19},
+	year     = {2021},
+	month    = {11}
+}
 ```
 
 ## Fonte Dati 
