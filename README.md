@@ -1,8 +1,7 @@
 <h1 align="center">
   COVID-19 Integrated Surveillance Data in Italy
 </h1> 
-
-[![language-italian](https://img.shields.io/badge/language-italian-blue.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README-ITA.md) [![language-english](https://img.shields.io/badge/language-english-red.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README.md)
+[![language-italian](https://img.shields.io/badge/Language-italian-blue.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README-ITA.md) [![language-english](https://img.shields.io/badge/Language-english-red.svg)](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/README.md) [![License: MIT](https://img.shields.io/badge/License-CC BY SA 4.0-green.svg)](https://github.com/InPhyT/UnrollingAverages.jl/blob/main/LICENSE)
 
 Every week the National Institute for Nuclear Physics ([INFN](https://home.infn.it/it/)) imports an anonymous individual-level dataset from the Italian National Institute of Health ([ISS](https://www.iss.it)) and converts it into an incidence time series data organized by date of event and disaggregated by sex, age and administrative level with a consolidation period of approximately two weeks. The information available to the [INFN](https://home.infn.it/it/) is summarised in the following [meta-table](https://covid19.infn.it/iss/campi-iss.pdf):
 
