@@ -461,9 +461,9 @@ uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [[Libffi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "761a393aeccd6aa92ec3515e428c26bf99575b3b"
+git-tree-sha1 = "0b4a5d71f3e5200a7dff793393e09dfc2d874290"
 uuid = "e9f186c6-92d2-5b65-8a66-fee21dc1b490"
-version = "3.2.2+0"
+version = "3.2.2+1"
 
 [[Libgcrypt_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgpg_error_jll", "Pkg"]
@@ -897,13 +897,11 @@ git-tree-sha1 = "53915e50200959667e78a92a418594b428dffddf"
 uuid = "1cfade01-22cf-5700-b092-accc4b62d6e1"
 version = "0.4.1"
 
-[[Unrolling]]
+[[UnrollingAverages]]
 deps = ["Combinatorics", "LinearAlgebra", "Statistics"]
-git-tree-sha1 = "b37ea91a01fc36900b404dc34850ff8dd0c4ceca"
-repo-rev = "main"
-repo-url = "https://github.com/InPhyT/Unrolling.jl"
-uuid = "316bfde5-7a3a-44d6-9d28-8e7fb119e12e"
-version = "0.1.0"
+git-tree-sha1 = "adf436da45edc571d0a31c46bcaaece53132cc70"
+uuid = "3f956635-a9f6-4086-ac4e-002c78554187"
+version = "0.2.0"
 
 [[UrlDownload]]
 deps = ["HTTP", "ProgressMeter"]

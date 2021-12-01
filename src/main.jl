@@ -6,16 +6,17 @@ cd("..")
 
 # Imports
 using Dates
-using Unrolling      # See https://github.com/InPhyT/Unrolling.jl
+using UnrollingAverages      # See https://github.com/InPhyT/Unrolling.jl
 using DataFrames,CSV
 using Plots
-using LoopVectorization
-using IfElse
+# using LoopVectorization # To be implemented
+# using IfElse
+
 # Switch backend
 pyplot()
 
 # Include functionalities
-include("src/utilities.jl")
+include("utilities.jl")
 
 # Set script-wise parameters 
 ## Number of data points considered in the moving average widow before the time it is associated to 
@@ -55,7 +56,7 @@ const total_female_male_paths = length(female_male_paths_without_lombardy_positi
 ## "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_symptomatic_male.csv"
 failed_paths_multithread = [String[] for i in 1:Threads.nthreads()] 
 
-                        
+
 # Multithreaded loop
 # Loop over all sex-disaggregayed paths except the nationals
 Threads.@threads for i in eachindex(female_male_paths_without_lombardy_positives_symptomatics)
