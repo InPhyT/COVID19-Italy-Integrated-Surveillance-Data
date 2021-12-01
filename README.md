@@ -162,7 +162,7 @@ If you use this data in your work, please cite this repository using the followi
 
 ### Data 
 
-1. Istituto Superiore di Sanità. [COVID-19 Integrated Surveillance Data](https://covid19.infn.it/iss/). 
+Istituto Superiore di Sanità. [COVID-19 Integrated Surveillance Data in Italy](https://covid19.infn.it/iss/). 
 
 ### Software 
 
