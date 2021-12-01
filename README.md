@@ -101,17 +101,17 @@ Raw data are downloaded from the [INFN](https://covid19.infn.it/iss/) (direct do
 
 In general, given the moving average (or rolling mean) of a time series, it's not possible to recover the original series unless *n* original points are known where *n* is the width of the window adopted in the moving average, but since epidemiological surveillance incidence series are strictly composed of natural numbers, we can leverage this property to come up with a finite number of candidate original series, and then prune these down to as little as possible, hopefully only one, final recovered series.
 
-The whole procedure is performed via the execution of the [main.jl](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/src/main.jl) script and the related technical details can be found the documentation of [Unrolling.jl]() package. 
+The whole procedure is performed via the execution of the [main.jl](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/src/main.jl) script and the related technical details can be found the documentation of [UnrollingAverages.jl](https://github.com/InPhyT/UnrollingAverages.jl) package. 
 
 The averaged time series to be **unrolled** (i.e. recovered, reconstructed or de-averaged) are those stored in the [`2_input/daily_incidences_by_region_sex_age`](https://github.com/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region_sex_age) folder: they are organized in .csv files, each of which reporting the 10 age-specific time series of a particular incidence in a particular region. Each dataset has two counterparts that are further stratified by sex.
 
-Since the smaller the numbers involved the better Unrolling.jl seems to perform, we opted for unrolling the sex-stratified series first and then aggregate them later. Since not all the age and sex stratified averaged series allows Unrolling.jl to find an unique original series and no further sex-stratified information is provided by INFN, we attempted to directly unroll the sex-aggregated time series for which CovidStat provides additional information in the form of age-aggregated original time series, that we employed to select that combination of age-disaggregated series proposed by Unrolling.jl which summed to the age-aggregated original time series provided by INFN. The utilized age and sex-aggregated may be found in the [`2_input/daily_incidences_by_region`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region) folder. We'll refer to the last selection algorithm as the **cross-sectional consistency constraint**. 
+Since the smaller the numbers involved the better UnrollingAverages.jl seems to perform, we opted for unrolling the sex-stratified series first and then aggregate them later. Since not all the age and sex stratified averaged series allows UnrollingAverages.jl to find an unique original series and no further sex-stratified information is provided by INFN, we attempted to directly unroll the sex-aggregated time series for which CovidStat provides additional information in the form of age-aggregated original time series, that we employed to select that combination of age-disaggregated series proposed by UnrollingAverages.jl which summed to the age-aggregated original time series provided by INFN. The utilized age and sex-aggregated may be found in the [`2_input/daily_incidences_by_region`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region) folder. We'll refer to the last selection algorithm as the **cross-sectional consistency constraint**. 
 
 The successfully reconstructed time series are then saved in the [`3_output/data`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/data) folder (both aggregated and disaggregated by sex), while the visualisations of those that are age-stratified and sex-aggregated may be found in [`3_output/figures`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/figures).
 
 ### Issues
 
-The sex-stratified averaged time series that Unrolling.jl could not resolve to a unique original series are the following:
+The sex-stratified averaged time series that UnrollingAverages.jl could not resolve to a unique original series are the following:
 
 * `iss_age_date_lombardy_positive_female`: daily time series of **confirmed female cases by date of diagnosis** stratified by age in Lombardy ;
 * `iss_age_date_lombardy_positive_male`: daily time series of **confirmed male cases by date of diagnosis** stratified by age in Lombardy ;
@@ -125,7 +125,7 @@ Unfortunately, for all the corresponding sex-aggregated datasets:
 * `iss_age_date_lombardy_symptomatic`;
 * `iss_age_date_emilia_romagna_positive` 
 
-the cross-sectional consistency constraint** currently fails, as the number of combinations returned by Unrolling.jl would require too much time to process, despite multiple efforts that have already improved performance (e.g. see the following Julia Discourse posts: [For loop optimization](https://discourse.julialang.org/t/for-loop-optimization/70700) and [How to improve performance in nested loops](https://discourse.julialang.org/t/how-to-improve-performance-in-nested-loops/70407)).
+the cross-sectional consistency constraint** currently fails, as the number of combinations returned by UnrollingAverages.jl would require too much time to process, despite multiple efforts that have already improved performance (e.g. see the following Julia Discourse posts: [For loop optimization](https://discourse.julialang.org/t/for-loop-optimization/70700) and [How to improve performance in nested loops](https://discourse.julialang.org/t/how-to-improve-performance-in-nested-loops/70407)).
 
 ### Future Developments
 
@@ -144,22 +144,32 @@ If you wish to change or add some functionality, please file an [issue](https://
 If you use this data in your work, please cite this repository using the following metadata: 
 
 ```bib
-@dataset{COVID19-Italy-Integrated-Surveillance-Data,
-	author   = {Pietro Monticone, Claudio Moroni},
-	title    = {COVID-19 Integrated Surveillance Data in Italy},
-	url      = {https://doi.org/},
-	doi      = {}, 
-	keywords = {Epidemiology, Surveillance, Data, Data Analysis, COVID-19},
-	year     = {2021},
-	month    = {11}
-}
+@dataset{Monticone_Moroni_COVID-19_Integrated_Surveillance_Data_Italy_2021,
+         abstract     = {COVID-19 integrated surveillance data provided by the Italian Institute of Health and processed via UnrollingAverages.jl to remove the weekly moving averages.},
+         author       = {Monticone, Pietro and Moroni, Claudio},
+         doi          = {},
+         institution  = {University of Turin (UniTO)},
+         keywords     = {Data, Data Analysis, Statistics, Time Series, Time Series Analysis, Epidemiological Data, Surveillance, Surveillance Data, Incidence Data, Open Data, Epidemiology, Mathematical Epidemiology, Computational Epidemiology, COVID-19, SARS-CoV-2, Italy, COVID-19 Data, SARS-CoV-2 Data},
+         license      = {CC BY-SA 4.0},
+         organization = {Interdisciplinary Physics Team (InPhyT)},
+         title        = {COVID-19 Integrated Surveillance Data in Italy},
+         url          = {},
+         year         = {2021}
+         }
 ```
 
-## Data Source
+## References 
 
-Istituto Superiore di Sanità. [COVID-19 Integrated Surveillance Data](https://covid19.infn.it/iss/). 
+### Data 
 
-## Relevant References 
+1. Istituto Superiore di Sanità. [COVID-19 Integrated Surveillance Data](https://covid19.infn.it/iss/). 
+
+### Software 
+
+1. Pietro Monticone, Claudio Moroni, UnrollingAverages.jl (2021) https:/doi.org/10.5281/zenodo.5731622.
+2. Tom Breloff, Plots.jl (2021) https:/doi.org/10.5281/zenodo.5747251.
+
+### Scientific Literature 
 
 * Katharine et al. (2021) [Exploring surveillance data biases when estimating the reproduction number: with insights into subpopulation transmission of COVID-19 in England](http://doi.org/10.1098/rstb.2020.0283) *Phil. Trans. R. Soc. B*.
 * Starnini, M., Aleta, A., Tizzoni, M., & Moreno, Y. (2021) [Impact of data accuracy on the evaluation of COVID-19 mitigation policies](https://www.doi.org/10.1017/dap.2021.25). *Data & Policy*, 3, E28. 

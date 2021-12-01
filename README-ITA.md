@@ -101,17 +101,17 @@ I dati grezzi sono scaricati dall'[INFN](https://covid19.infn.it/iss/) (download
 
 In generale, data una media mobile di una serie temporale, non è possibile recuperare la serie originale almeno che non siano noti *n* punti originali dove *n* è l'ampiezza della finestra adottata nella media mobile, ma dal momento che le serie di incidenza della sorveglianza epidemiologica sono composte strettamente da numeri naturali, possiamo sfruttare questa proprietà per arrivare ad un numero finito di potenziali serie originali, poi sfoltirle il più possibile, sperabilmente ad una unica che sarebbe la serie originale esattamente ricostruita.
 
-L'intera procedura è effettuata mediante l'esecuzione dello script [main.jl](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/src/main.jl) e i dettagli tecnici rilevanti si possono trovare nella documentazione del pacchetto [Unrolling.jl](). 
+L'intera procedura è effettuata mediante l'esecuzione dello script [main.jl](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/src/main.jl) e i dettagli tecnici rilevanti si possono trovare nella documentazione del pacchetto [UnrollingAverages.jl](https://github.com/InPhyT/UnrollingAverages.jl). 
 
 Le serie temporali mediate che devono essere **srotolate** (i.e. recuperate, ricostruite) sono quelle archiviate nella cartella [`2_input/daily_incidences_by_region_sex_age`](https://github.com/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region_sex_age): sono organizzate in file in formato .csv, ognuno dei quali contenente le 10 serie specifiche per le classi d'età di una particolare incidenza in una particolare regione. Ogni dataset ha altri due datasets associati che sono ulteriormente stratificati per sesso.
 
-Dal momento che minore sono i numeri coinvolti e meglio sembra performare Unrolling.jl, abbiamo optato per ricostruire prima le serie stratificate per sesso ed aggregarle in seguito. Poiché non tutte le serie mediate stratificate per sesso ed età permettono ad Unrolling.jl di trovare un'unica serie originale e poiché INFN non fornisce alcuna ulteriore informazione stratificata per sesso, abbiamo provato a ricostruire direttamente le serie aggregate per sesso per cui INFN fornisce informazioni addizionali nella forma di serie originali aggregate per età, che abbiamo utilizzato per selezionare la combinazione di serie disaggregate per età proposte da Unrolling.jl che sommasse a quella aggregata per età. I datasets aggregati così utilizzati si trovano nella cartella [`2_input/daily_incidences_by_region`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region) folder. Ci riferiremo all'algoritmo di selezione appena descritto con **vincolo di consistenza sezionale**. 
+Dal momento che minore sono i numeri coinvolti e meglio sembra performare UnrollingAverages.jl, abbiamo optato per ricostruire prima le serie stratificate per sesso ed aggregarle in seguito. Poiché non tutte le serie mediate stratificate per sesso ed età permettono ad UnrollingAverages.jl di trovare un'unica serie originale e poiché INFN non fornisce alcuna ulteriore informazione stratificata per sesso, abbiamo provato a ricostruire direttamente le serie aggregate per sesso per cui INFN fornisce informazioni addizionali nella forma di serie originali aggregate per età, che abbiamo utilizzato per selezionare la combinazione di serie disaggregate per età proposte da UnrollingAverages.jl che sommasse a quella aggregata per età. I datasets aggregati così utilizzati si trovano nella cartella [`2_input/daily_incidences_by_region`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region) folder. Ci riferiremo all'algoritmo di selezione appena descritto con **vincolo di consistenza sezionale**. 
 
 Le serie temporali esattamente ricostruite sono poi salvate nella cartella [`3_output/data`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/data), mentre le visualizzazioni di quelle stratificate per età ed aggregate per sesso si trovano nella cartella [`3_output/figures`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/figures).
 
 ### Limitazioni 
 
-Le serie temporali mediate startificate per sesso che Unrolling.jl non è riuscito a restringere ad un unica serie originale sono le seguenti: 
+Le serie temporali mediate startificate per sesso che UnrollingAverages.jl non è riuscito a restringere ad un unica serie originale sono le seguenti: 
 
 * `iss_age_date_lombardy_positive_female`: serie temporali giornaliere di **casi femminili confermati per data di diagnosi** stratificate per età in Lombardia ;
 * `iss_age_date_lombardy_positive_male`: serie temporali giornaliere di **casi maschili confermati per data di diagnosi** stratificate per età in Lombardia ;
@@ -126,7 +126,7 @@ Sfortunatamente, per tutti i datasets aggregati per sesso corrispondenti:
 * `iss_age_date_lombardy_symptomatic`;
 * `iss_age_date_emilia_romagna_positive` 
 
-il vincolo di consistenza sezionale al momento fallisce, dal momento che il numero di combinazioni selezionate da Unrolling.jl necessiterebbe di troppo tempo per essere effettivamente processate nonostante i numerosi miglioramenti di performance già implementati (e.g. si vedano i seguenti posts su Julia Discourse: [For loop optimization](https://discourse.julialang.org/t/for-loop-optimization/70700) and [How to improve performance in nested loops](https://discourse.julialang.org/t/how-to-improve-performance-in-nested-loops/70407)).
+il vincolo di consistenza sezionale al momento fallisce, dal momento che il numero di combinazioni selezionate da UnrollingAverages.jl necessiterebbe di troppo tempo per essere effettivamente processate nonostante i numerosi miglioramenti di performance già implementati (e.g. si vedano i seguenti posts su Julia Discourse: [For loop optimization](https://discourse.julialang.org/t/for-loop-optimization/70700) and [How to improve performance in nested loops](https://discourse.julialang.org/t/how-to-improve-performance-in-nested-loops/70407)).
 
 ### Sviluppi Futuri 
 
@@ -145,22 +145,32 @@ Se volete modificare o aggiungere qualche funzionalità siete pregati di aprire 
 Se usate questi dati nel vostro lavoro siete pregati di citare questo repository usando i seguenti metadati: 
 
 ```bib
-@dataset{COVID19-Italy-Integrated-Surveillance-Data,
-	author   = {Pietro Monticone, Claudio Moroni},
-	title    = {COVID-19 Integrated Surveillance Data in Italy},
-	url      = {https://doi.org/},
-	doi      = {}, 
-	keywords = {Epidemiology, Surveillance, Data, Data Analysis, COVID-19},
-	year     = {2021},
-	month    = {11}
-}
+@dataset{Monticone_Moroni_COVID-19_Integrated_Surveillance_Data_Italy_2021,
+         abstract     = {COVID-19 integrated surveillance data provided by the Italian Institute of Health and processed via UnrollingAverages.jl to remove the weekly moving averages.},
+         author       = {Monticone, Pietro and Moroni, Claudio},
+         doi          = {},
+         institution  = {University of Turin (UniTO)},
+         keywords     = {Data, Data Analysis, Statistics, Time Series, Time Series Analysis, Epidemiological Data, Surveillance, Surveillance Data, Incidence Data, Open Data, Epidemiology, Mathematical Epidemiology, Computational Epidemiology, COVID-19, SARS-CoV-2, Italy, COVID-19 Data, SARS-CoV-2 Data},
+         license      = {CC BY-SA 4.0},
+         organization = {Interdisciplinary Physics Team (InPhyT)},
+         title        = {COVID-19 Integrated Surveillance Data in Italy},
+         url          = {},
+         year         = {2021}
+         }
 ```
 
-## Fonte Dati 
+## Referenze 
 
-Istituto Superiore di Sanità. [COVID-19 Integrated Surveillance Data](https://covid19.infn.it/iss/). 
+### Dati 
 
-## Referenze Rilevanti
+1. Istituto Superiore di Sanità. [COVID-19 Integrated Surveillance Data](https://covid19.infn.it/iss/). 
+
+### Software 
+
+1. Pietro Monticone, Claudio Moroni, UnrollingAverages.jl (2021) https:/doi.org/10.5281/zenodo.5731622.
+2. Tom Breloff, Plots.jl (2021) https:/doi.org/10.5281/zenodo.5747251.
+
+### Letteratura Scientifica
 
 * Katharine et al. (2021) [Exploring surveillance data biases when estimating the reproduction number: with insights into subpopulation transmission of COVID-19 in England](http://doi.org/10.1098/rstb.2020.0283) *Phil. Trans. R. Soc. B*.
 * Starnini, M., Aleta, A., Tizzoni, M., & Moreno, Y. (2021) [Impact of data accuracy on the evaluation of COVID-19 mitigation policies](https://www.doi.org/10.1017/dap.2021.25). *Data & Policy*, 3, E28. 
