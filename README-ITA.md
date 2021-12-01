@@ -167,8 +167,8 @@ Se usate questi dati nel vostro lavoro siete pregati di citare questo repository
 
 ### Software 
 
-1. Pietro Monticone, Claudio Moroni, UnrollingAverages.jl (2021) https:/doi.org/10.5281/zenodo.5731622.
-2. Tom Breloff, Plots.jl (2021) https:/doi.org/10.5281/zenodo.5747251.
+1. Pietro Monticone, Claudio Moroni, UnrollingAverages.jl (2021) [https:/doi.org/10.5281/zenodo.5731622](https:/doi.org/10.5281/zenodo.5731622).
+2. Tom Breloff, Plots.jl (2021) [https:/doi.org/10.5281/zenodo.5747251](https:/doi.org/10.5281/zenodo.5747251).
 
 ### Letteratura Scientifica
 
