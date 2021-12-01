@@ -6,7 +6,7 @@ cd("..")
 
 # Imports
 using Dates
-using UnrollingAverages      # See https://github.com/InPhyT/Unrolling.jl
+using UnrollingAverages
 using DataFrames,CSV
 using Plots
 # using LoopVectorization # To be implemented
