@@ -89,8 +89,6 @@ I dati di output sono stati archiviati [qui](https://github.com/InPhyT/COVID19-I
 
 ![lazio-deceduti](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_deceased.png)
 
-**NB**: Tutti i dati presenti in questo repository verranno aggiornati ogni qualvolta saranno aggiornati quelli forniti da INFN.
-
 ## Metodologia
 
 ### Organizzazione Dati 

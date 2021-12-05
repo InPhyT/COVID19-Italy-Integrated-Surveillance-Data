@@ -89,8 +89,6 @@ The output data has been stored [here](https://github.com/InPhyT/COVID19-Italy-I
 
 ![lazio-deceased](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_deceased.png)
 
-**NB**: All the data in this repository will be updated every time the source data provided by INFN will.
-
 ## Methodology 
 
 ### Data Organization
