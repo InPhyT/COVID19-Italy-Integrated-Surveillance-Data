@@ -40,7 +40,7 @@ const os_separator = Base.Filesystem.path_separator
 
 const input_paths = readdir(input_dir_path; join = true, sort = false)
 # As per methodology, get all paths that contain "male" and "female", except those regarding italy (all incidences) or positive and symptomatic incidences in lombardy. These we know to cause problems, Those that can't be unqiuely determined are saved in a failed array, later used to try the corresponding non-sex stratified ones.
-const female_male_paths_without_lombardy_positives_symptomatics = [path for path in input_paths if ((!occursin("lombardy",path) && (occursin("male", path) || occursin("female", path))) || (occursin("lombardy",path) && (!occursin("symptomatic", path) && !occursin("confirmed",path)) && (occursin("male", path) || occursin("female", path)) )) ] # && !occursin("italy",path)
+const female_male_paths_without_lombardy_positives_symptomatics = [path for path in input_paths if ((!occursin("lombardy",path) && (occursin("male", path) || occursin("female", path))) || (occursin("lombardy",path) && (!occursin("symptomatic", path) && !occursin("confirmed",path)) && (occursin("male", path) || occursin("female", path)) )) && !occursin(".gitkeep",path) ][1:5] # && !occursin("italy",path)
 const female_male_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) ] #(!occursin("sintomatici", path) && !occursin("positivi",path)) && && !occursin("italy",path) 
 const lombardy_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) && occursin("lombardy",path) ]
 #const lombardy_positive_symptomatics_paths = reverse([path for path in input_paths if !occursin("maschi", path) && !occursin("femmine", path) && occursin("lombardia",path) && (occursin("positivi",path) || occursin("sintomatici",path))])
@@ -96,53 +96,54 @@ const failed_paths = vcat(failed_paths_multithread...)
 
 
 
-# Attempt unrollign of sex-aggregated time series for the datasets that couldn't be brought back to a single time series
-## Aggregate paths by sex
-sex_aggregated_paths = unique([multiple_string_replace(failed_path, ("_male" => "", "_female" => "")) for failed_path  in failed_paths])
-## Compute total sex-aggregated paths to be unrolled
-const total_sex_aggregated_paths = length(sex_aggregated_paths)
-## Loop over the sex aggregated paths
-Threads.@threads for i in eachindex(sex_aggregated_paths)
-    sex_aggregated_path = sex_aggregated_paths[i]
-    # Name to be given to the output file
-    output_name =  string(split(sex_aggregated_path, os_separator)[end])
-    println("\nUnrolling $output_name ( $i \\ $total_sex_aggregated_paths) ...")
-    # Load horizontal chack (if it exists)
-    horizontal_check_cases::Union{Nothing,Vector{Int64}} = nothing
-    try
+# # Attempt unrollign of sex-aggregated time series for the datasets that couldn't be brought back to a single time series
+# ## Aggregate paths by sex
+# sex_aggregated_paths = unique([multiple_string_replace(failed_path, ("_male" => "", "_female" => "")) for failed_path  in failed_paths])
+# ## Compute total sex-aggregated paths to be unrolled
+# const total_sex_aggregated_paths = length(sex_aggregated_paths)
+# ## Loop over the sex aggregated paths
+# Threads.@threads for i in eachindex(sex_aggregated_paths)
+#     sex_aggregated_path = sex_aggregated_paths[i]
+#     # Name to be given to the output file
+#     output_name =  string(split(sex_aggregated_path, os_separator)[end])
+#     println("\nUnrolling $output_name ( $i \\ $total_sex_aggregated_paths) ...")
+#     # Load horizontal chack (if it exists)
+#     horizontal_check_cases::Union{Nothing,Vector{Int64}} = nothing
+#     try
         
-        horizontal_check_cases = CSV.read( joinpath(region_incidences_dir, get_aggregated_dataframe_name_from_unaggragated_dataframe(output_name)), DataFrame)[!,"casi"][(1+skip_lines):end]
+#         horizontal_check_cases = CSV.read( joinpath(region_incidences_dir, get_aggregated_dataframe_name_from_unaggragated_dataframe(output_name)), DataFrame)[!,"incidence"][(1+skip_lines):end]
 
-        println("Horizontal check series found")
-    catch e
-        println("Horizontal check series NOT found")
-    end
-    # Reconstruct the time series, optionally making use of the total cases check
-    sex_aggregated_dataframe = CSV.read(sex_aggregated_path,DataFrame)
-    reconstructed_df::DataFrame = DataFrame()
-    try
-        reconstructed_df = unroll_iss_infn_csv(sex_aggregated_dataframe, n₋, n₊,horizontal_check_cases)
-        save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
-    catch e
-        if isa(e, ErrorException)
-            println(e.msg)
-            continue
-        else
-            throw(e)
-        end
-        continue
-    end
-end
+#         println("Horizontal check series found")
+#     catch e
+#         println("Horizontal check series NOT found")
+#     end
+#     # Reconstruct the time series, optionally making use of the total cases check
+#     sex_aggregated_dataframe = CSV.read(sex_aggregated_path,DataFrame)
+#     reconstructed_df::DataFrame = DataFrame()
+#     try
+#         reconstructed_df = unroll_iss_infn(sex_aggregated_dataframe, n₋, n₊,horizontal_check_cases)
+#         save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
+#     catch e
+#         if isa(e, ErrorException)
+#             println(e.msg)
+#             continue
+#         else
+#             throw(e)
+#         end
+#         continue
+#     end
+# end
 
 
 # Paths to outputted .csvs with OS-specific file separators
-const output_paths = [replace(path, "/" => os_separator) for path in readdir(output_files_dir_path; join = true)]
+const output_paths = [replace(path, "/" => os_separator) for path in readdir(output_files_dir_path; join = true) if !occursin(".gitkeep",path)][1:5]
 
 
 ## Plot each unrolled csv toghether with averaged data
 const output_plots_dir_path = "3_output/figures"
 # Loop over all outputted paths
 for output_path in output_paths
+    break # TO BE REMOVED
 
     # Discard males sincefor every female path we also consider the corresponding male
     if occursin("_male",output_path)

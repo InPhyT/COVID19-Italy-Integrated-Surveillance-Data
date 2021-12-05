@@ -2,6 +2,7 @@
 cd("src")
 using Pkg
 Pkg.activate(".")
+Pkg.instantiate()
 cd("..")
 
 using DataFrames
@@ -179,10 +180,10 @@ end
 # Fill the input folder
 ## Copy regional rolling means
 const input_daily_incidences_by_region_sex_age = joinpath(input_dir_path, regular_infix_folderName_associations_en[["_age_date"]])
-cp(joinpath(folder_structure_root_path, regular_infix_folderName_associations_en[["_age_date"]]), input_daily_incidences_by_region_sex_age)
+cp(joinpath(folder_structure_root_path, regular_infix_folderName_associations_en[["_age_date"]]), input_daily_incidences_by_region_sex_age; force=true)
 ## Copy regional original series
 const input_daily_incidences_by_region = joinpath(input_dir_path,"daily_incidences_by_region")
-cp(joinpath(folder_structure_root_path, "daily_incidences_by_region"), input_daily_incidences_by_region)
+cp(joinpath(folder_structure_root_path, "daily_incidences_by_region"), input_daily_incidences_by_region; force=true)
 
 # Delete the national input files ended in 2_input
 const national_paths = filter(path -> occursin("italy",path), vcat(readdir(input_daily_incidences_by_region_sex_age; join = true ), readdir(input_daily_incidences_by_region; join = true ) ))
