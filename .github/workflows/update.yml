@@ -2,16 +2,16 @@
 # For more information about workflows, see the GitHub documentation: https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
 
 # Name of this workflow
-name: download and process
+name: update
 
 # Choose when the workflow should run
 ## Run the workflow at every push
-#on: [push]
+on: [push]
 ## Run the workflow every 6 minutes (see https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#scheduled-events)
 # on:
 #   schedule:
 #     # * is a special character in YAML so you have to quote this string
-#     - cron:  '59 23 * * 4'
+#     - cron:  '59 23 * * 3'
 # Workflows are made of concurrent jobs, and every job is made of sequenctial steps. Steps may invoce actions.
 jobs:
   # Name of the job
@@ -89,10 +89,10 @@ jobs:
         with:
           version: ${{ steps.previoustag.outputs.tag }}
       ## Create new release
-      - name: Release
-        id: release 
-        uses: ncipollo/release-action@v1
-        with:
-          body: "Data updated as of ${{ steps.date.outputs.date }}"
-          tag: ${{ steps.semvers.outputs.v_major }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Release
+      #   id: release 
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     body: "Data updated as of ${{ steps.date.outputs.date }}"
+      #     tag: ${{ steps.semvers.outputs.v_major }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
