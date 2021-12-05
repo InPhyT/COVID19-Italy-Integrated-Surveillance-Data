@@ -40,7 +40,7 @@ const os_separator = Base.Filesystem.path_separator
 
 const input_paths = readdir(input_dir_path; join = true, sort = false)
 # As per methodology, get all paths that contain "male" and "female", except those regarding italy (all incidences) or positive and symptomatic incidences in lombardy. These we know to cause problems, Those that can't be unqiuely determined are saved in a failed array, later used to try the corresponding non-sex stratified ones.
-const female_male_paths_without_lombardy_positives_symptomatics = [path for path in input_paths if ((!occursin("lombardy",path) && (occursin("male", path) || occursin("female", path))) || (occursin("lombardy",path) && (!occursin("symptomatic", path) && !occursin("confirmed",path)) && (occursin("male", path) || occursin("female", path)) )) && !occursin(".gitkeep",path) ][1:5] # && !occursin("italy",path)
+const female_male_paths_without_lombardy_positives_symptomatics = [path for path in input_paths if ((!occursin("lombardy",path) && (occursin("male", path) || occursin("female", path))) || (occursin("lombardy",path) && (!occursin("symptomatic", path) && !occursin("confirmed",path)) && (occursin("male", path) || occursin("female", path)) )) && !occursin(".gitkeep",path) ] # && !occursin("italy",path)
 const female_male_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) ] #(!occursin("sintomatici", path) && !occursin("positivi",path)) && && !occursin("italy",path) 
 const lombardy_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) && occursin("lombardy",path) ]
 #const lombardy_positive_symptomatics_paths = reverse([path for path in input_paths if !occursin("maschi", path) && !occursin("femmine", path) && occursin("lombardia",path) && (occursin("positivi",path) || occursin("sintomatici",path))])
@@ -136,7 +136,7 @@ const failed_paths = vcat(failed_paths_multithread...)
 
 
 # Paths to outputted .csvs with OS-specific file separators
-const output_paths = [replace(path, "/" => os_separator) for path in readdir(output_files_dir_path; join = true) if !occursin(".gitkeep",path)][1:5]
+const output_paths = [replace(path, "/" => os_separator) for path in readdir(output_files_dir_path; join = true) if !occursin(".gitkeep",path)]
 
 
 ## Plot each unrolled csv toghether with averaged data
