@@ -73,26 +73,26 @@ jobs:
 
       # Get previous release's tag, increment its major version and use it to make a new release. New release has date and time in its body.
       ## Get current date time (to be used in the release's body)
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      ## Get tag of the previous version
-      - name: 'Get Previous tag'
-        id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
-        with:
-          fallback: v1.0.0 # Optional fallback tag to use when no tag can be found
-      ## Increase previous tag and save it
-      - name: 'Get next major version'
-        id: semvers
-        uses: "WyriHaximus/github-action-next-semvers@v1"
-        with:
-          version: ${{ steps.previoustag.outputs.tag }}
-      ## Create new release
-      - name: Release
-        id: release 
-        uses: ncipollo/release-action@v1
-        with:
-          body: "Data updated as of ${{ steps.date.outputs.date }}"
-          tag: ${{ steps.semvers.outputs.v_major }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Get current date
+      #   id: date
+      #   run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      # ## Get tag of the previous version
+      # - name: 'Get Previous tag'
+      #   id: previoustag
+      #   uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      #   with:
+      #     fallback: v1.0.0 # Optional fallback tag to use when no tag can be found
+      # ## Increase previous tag and save it
+      # - name: 'Get next major version'
+      #   id: semvers
+      #   uses: "WyriHaximus/github-action-next-semvers@v1"
+      #   with:
+      #     version: ${{ steps.previoustag.outputs.tag }}
+      # ## Create new release
+      # - name: Release
+      #   id: release 
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     body: "Data updated as of ${{ steps.date.outputs.date }}"
+      #     tag: ${{ steps.semvers.outputs.v_major }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
