@@ -140,10 +140,9 @@ const output_paths = [replace(path, "/" => os_separator) for path in readdir(out
 
 
 ## Plot each unrolled csv toghether with averaged data
-const output_plots_dir_path = "3_output/figures"
+const output_plots_dir_path = "3_output/figures/"
 # Loop over all outputted paths
 for output_path in output_paths
-    break # TO BE REMOVED
 
     # Discard males sincefor every female path we also consider the corresponding male
     if occursin("_male",output_path)
