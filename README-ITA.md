@@ -170,5 +170,6 @@ Istituto Superiore di Sanità. [Dati Sorveglianza Integrata COVID-19 in Italia](
 
 ### Letteratura Scientifica
 
+* Del Manso et al. (2020) [La sorveglianza integrata Covid-19 in Italia: output e attività correlate](https://doi.org/10.19191/EP20.5-6.S2.105). *Epidemiologia&Prevenzione*
 * Katharine et al. (2021) [Exploring surveillance data biases when estimating the reproduction number: with insights into subpopulation transmission of COVID-19 in England](http://doi.org/10.1098/rstb.2020.0283) *Phil. Trans. R. Soc. B*.
 * Starnini, M., Aleta, A., Tizzoni, M., & Moreno, Y. (2021) [Impact of data accuracy on the evaluation of COVID-19 mitigation policies](https://www.doi.org/10.1017/dap.2021.25). *Data & Policy*, 3, E28. 
