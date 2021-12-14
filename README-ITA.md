@@ -59,11 +59,11 @@ I dati di input sono stati archiviati [qui](https://github.com/InPhyT/COVID19-It
   * Serie temporali giornaliere e in media mobile settimanale di **ammisioni intensive per data di ammissione** a livello regionale;
   * Serie temporali giornaliere e in media mobile settimanale di **casi deceduti per data di decesso** a livello regionale.
 * Dati disaggregati nella cartella [`daily_incidences_by_region_sex_age`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region_sex_age):
-  * Serie temporali in media mobile settimanale di **casi sintomatici per data di inizio sintomi** a livello regionale;
-  * Serie temporali in media mobile settimanale di **casi confermati per data di diagnosi** a livello regionale;
-  * Serie temporali in media mobile settimanale di **ammisioni ordinarie per data di ammissione** a livello regionale;
-  * Serie temporali in media mobile settimanale di **ammisioni intensive per data di ammissione** a livello regionale;
-  * Serie temporali in media mobile settimanale di **casi deceduti per data di decesso** a livello regionale.
+  * Serie temporali in media mobile settimanale di **casi sintomatici per data di inizio sintomi** stratificati per sesso ed età a livello regionale;
+  * Serie temporali in media mobile settimanale di **casi confermati per data di diagnosi** stratificati per sesso ed età a livello regionale;
+  * Serie temporali in media mobile settimanale di **ammisioni ordinarie per data di ammissione** stratificati per sesso ed età a livello regionale;
+  * Serie temporali in media mobile settimanale di **ammisioni intensive per data di ammissione** stratificati per sesso ed età a livello regionale;
+  * Serie temporali in media mobile settimanale di **casi deceduti per data di decesso** stratificati per sesso ed età a livello regionale.
 
 ### Output 
 
