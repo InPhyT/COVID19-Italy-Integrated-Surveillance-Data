@@ -11,7 +11,7 @@ name: update
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '59 22 * * 3'
+    - cron:  '59 22 * * 2'
 # Workflows are made of concurrent jobs, and every job is made of sequenctial steps. Steps may invoce actions.
 jobs:
   # Name of the job
