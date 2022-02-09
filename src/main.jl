@@ -29,6 +29,8 @@ const skip_lines = 1
 # Paths
 ## Path to input folder
 const input_dir_path = raw"2_input/daily_incidences_by_region_sex_age"
+## Path to initial_conditions
+const path_to_initial_conditions = raw"./initial_conditions"
 ## Path to regional incidences, for total cases check
 const region_incidences_dir = raw"2_input/daily_incidences_by_region"
 ## Path to over80 incidences. Currently unused, it woudl allow for a slightly better total cases check.
