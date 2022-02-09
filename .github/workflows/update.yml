@@ -1,98 +1,100 @@
-# This workflow file is responsile for downloading the .tar.gzip file from https://covid19.infn.it/, running the scripts that decompress and process it, committing the results and creating a release.
-# For more information about workflows, see the GitHub documentation: https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
+# # This workflow file is responsile for downloading the .tar.gzip file from https://covid19.infn.it/, running the scripts that decompress and process it, committing the results and creating a release.
+# # For more information about workflows, see the GitHub documentation: https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
 
-# Name of this workflow
-name: update
+# # Name of this workflow
+# name: update
 
-# Choose when the workflow should run
-## Run the workflow at every push
-# on: [push]
-## Run the workflow every 6 minutes (see https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#scheduled-events)
-on:
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron:  '59 22 * * 3'
-# Workflows are made of concurrent jobs, and every job is made of sequenctial steps. Steps may invoce actions.
-jobs:
-  # Name of the job
-  build:
-    # Run the job on a ubuntu machine
-    runs-on: ubuntu-latest
-    steps:
+# # Choose when the workflow should run
+# ## Run the workflow at every push
+# # on: [push]
+# ## Run the workflow every 6 minutes (see https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#scheduled-events)
+# on:
+#   schedule:
+#     # * is a special character in YAML so you have to quote this string
+#     - cron:  '59 22 * * 3'
+#     # Restrict execution to main branch
+#     - branches: main
+# # Workflows are made of concurrent jobs, and every job is made of sequenctial steps. Steps may invoce actions.
+# jobs:
+#   # Name of the job
+#   build:
+#     # Run the job on a ubuntu machine
+#     runs-on: ubuntu-latest
+#     steps:
 
-      # Checkout (copy locally) the repository main branch
-      - name: Checkout repository content
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
+#       # Checkout (copy locally) the repository main branch
+#       - name: Checkout repository content
+#         uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
 
 
-      # Install python and Julia. Run scripts.
-      ## Setup (install) Python 3.10.0
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.10.0'
-      ## Install Python packages. Note that matplotlib is needed by PyPlot, which is a Julia package we install below.
-      - name: Install Python packages
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
-          pip install matplotlib    
-      ## Execute download_extract.py
-      - name: Execute download_extract.py 
-        run: |
-          python src/download_extract.py
-      ## Setup Julia 1.6.4
-      - name: "Set up Julia"
-        uses: julia-actions/setup-julia@v1.6.0
-        with:
-          version: "1.6.4"
-      ## Execute Julia files
-      - name: Execute data_organization.jl and main.jl
-        run: |
-          julia src/data_organization.jl
-          julia src/main.jl
+#       # Install python and Julia. Run scripts.
+#       ## Setup (install) Python 3.10.0
+#       - name: Setup Python
+#         uses: actions/setup-python@v2
+#         with:
+#           python-version: '3.10.0'
+#       ## Install Python packages. Note that matplotlib is needed by PyPlot, which is a Julia package we install below.
+#       - name: Install Python packages
+#         run: |
+#           python -m pip install --upgrade pip
+#           pip install requests
+#           pip install matplotlib    
+#       ## Execute download_extract.py
+#       - name: Execute download_extract.py 
+#         run: |
+#           python src/download_extract.py
+#       ## Setup Julia 1.6.4
+#       - name: "Set up Julia"
+#         uses: julia-actions/setup-julia@v1.6.0
+#         with:
+#           version: "1.6.4"
+#       ## Execute Julia files
+#       - name: Execute data_organization.jl and main.jl
+#         run: |
+#           julia src/data_organization.jl
+#           julia src/main.jl
           
 
-      # Commit and push
-      ## Commit outputs
-      - name: Commit files
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -A
-          git commit -m "update data" -a
-      ## Push 
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main  
+#       # Commit and push
+#       ## Commit outputs
+#       - name: Commit files
+#         run: |
+#           git config --local user.email "action@github.com"
+#           git config --local user.name "GitHub Action"
+#           git add -A
+#           git commit -m "update data" -a
+#       ## Push 
+#       - name: Push changes
+#         uses: ad-m/github-push-action@v0.6.0
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           branch: main  
 
 
-      # Get previous release's tag, increment its major version and use it to make a new release. New release has date and time in its body.
-      ## Get current date time (to be used in the release's body)
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      ## Get tag of the previous version
-      - name: 'Get Previous tag'
-        id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
-        with:
-          fallback: v1.0.0 # Optional fallback tag to use when no tag can be found
-      ## Increase previous tag and save it
-      - name: 'Get next major version'
-        id: semvers
-        uses: "WyriHaximus/github-action-next-semvers@v1"
-        with:
-          version: ${{ steps.previoustag.outputs.tag }}
-      ## Create new release
-      - name: Release
-        id: release 
-        uses: ncipollo/release-action@v1
-        with:
-          body: "Data updated as of ${{ steps.date.outputs.date }}"
-          tag: ${{ steps.semvers.outputs.v_major }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+#       # Get previous release's tag, increment its major version and use it to make a new release. New release has date and time in its body.
+#       ## Get current date time (to be used in the release's body)
+#       - name: Get current date
+#         id: date
+#         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+#       ## Get tag of the previous version
+#       - name: 'Get Previous tag'
+#         id: previoustag
+#         uses: "WyriHaximus/github-action-get-previous-tag@v1"
+#         with:
+#           fallback: v1.0.0 # Optional fallback tag to use when no tag can be found
+#       ## Increase previous tag and save it
+#       - name: 'Get next major version'
+#         id: semvers
+#         uses: "WyriHaximus/github-action-next-semvers@v1"
+#         with:
+#           version: ${{ steps.previoustag.outputs.tag }}
+#       ## Create new release
+#       - name: Release
+#         id: release 
+#         uses: ncipollo/release-action@v1
+#         with:
+#           body: "Data updated as of ${{ steps.date.outputs.date }}"
+#           tag: ${{ steps.semvers.outputs.v_major }}
+#           token: ${{ secrets.GITHUB_TOKEN }}
