@@ -175,3 +175,4 @@ Istituto Superiore di Sanità. [COVID-19 Integrated Surveillance Data in Italy](
 * Starnini et al. (2021) [Impact of data accuracy on the evaluation of COVID-19 mitigation policies](https://www.doi.org/10.1017/dap.2021.25). *Data & Policy*, 3, E28. 
 * Zhang et al. (2021) [Data science approaches to confronting the COVID-19 pandemic: a narrative review](https://doi.org/10.1098/rsta.2021.0127). *Philosophical Transactions of the Royal Society A*
 * Vasiliauskaite et al. (2021) [On some fundamental challenges in monitoring epidemics](https://doi.org/10.1098/rsta.2021.0117). *Philosophical Transactions of the Royal Society A*
+* Kozlov (2022) [NIH issues a seismic mandate: share data publicly](https://doi.org/10.1038/d41586-022-00402-1). *Nature News*
