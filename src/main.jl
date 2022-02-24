@@ -68,7 +68,7 @@ Threads.@threads for i in eachindex(female_male_paths_without_lombardy_positives
     incidence_dataframe = CSV.read(input_path,DataFrame)
     reconstructed_df::DataFrame = DataFrame()
     try
-        reconstructed_df = unroll_iss_infn(incidence_dataframe, n₋, n₊,nothing)
+        reconstructed_df = unroll_iss_infn(incidence_dataframe, n₋, n₊,nothing; skip_lines = 0)
         save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
     catch e
         if isa(e, ErrorException)
