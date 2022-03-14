@@ -17,7 +17,7 @@ using Plots
 pyplot()
 
 # Include functionalities
-include("src/utilities.jl")
+include("utilities.jl")
 
 # Set script-wise parameters 
 ## Number of data points considered in the moving average widow before the time it is associated to 
@@ -63,7 +63,6 @@ const total_female_male_paths = length(female_male_paths)
 failed_paths_multithread = [String[] for i in 1:Threads.nthreads()] 
 reconstructed_csvs = Dict{String, DataFrame}()
 
-include("src/utilities.jl")
 # Multithreaded loop
 # Loop over all sex-disaggregayed paths except the nationals
 for i in eachindex(female_male_paths)   #Threads.@threads 
