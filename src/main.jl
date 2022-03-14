@@ -2,6 +2,7 @@
 cd("src")
 using Pkg
 Pkg.activate(".")
+Pkg.instantiate()
 cd("..")
 
 # Imports
@@ -16,7 +17,7 @@ using Plots
 pyplot()
 
 # Include functionalities
-include("utilities.jl")
+include("src/utilities.jl")
 
 # Set script-wise parameters 
 ## Number of data points considered in the moving average widow before the time it is associated to 
@@ -24,13 +25,13 @@ const n₋ = 2
 ## Number of data points considered in the moving average widow after the time it is associated to 
 const n₊ = 4
 ## Number of top data points not considered during averages 
-const skip_lines = 1
+const skip_lines = 0
 
 # Paths
 ## Path to input folder
 const input_dir_path = raw"2_input/daily_incidences_by_region_sex_age"
 ## Path to initial_conditions
-const path_to_initial_conditions = raw"./initial_conditions"
+const path_to_initial_conditions = raw"./2_input/initial_conditions"
 ## Path to regional incidences, for total cases check
 const region_incidences_dir = raw"2_input/daily_incidences_by_region"
 ## Path to over80 incidences. Currently unused, it woudl allow for a slightly better total cases check.
@@ -39,14 +40,17 @@ const region_incidences_dir = raw"2_input/daily_incidences_by_region"
 const output_files_dir_path = raw"3_output/data/"
 ## Get OS-specific file path separator
 const os_separator = Base.Filesystem.path_separator
+## Path to processed ground truths
+# const path_to_processed_ground_truths = "./processed_ground_truths"
+
 
 const input_paths = readdir(input_dir_path; join = true, sort = false)
 # As per methodology, get all paths that contain "male" and "female", except those regarding italy (all incidences) or positive and symptomatic incidences in lombardy. These we know to cause problems, Those that can't be unqiuely determined are saved in a failed array, later used to try the corresponding non-sex stratified ones.
 const female_male_paths_without_lombardy_positives_symptomatics = [path for path in input_paths if ((!occursin("lombardy",path) && (occursin("male", path) || occursin("female", path))) || (occursin("lombardy",path) && (!occursin("symptomatic", path) && !occursin("confirmed",path)) && (occursin("male", path) || occursin("female", path)) )) && !occursin(".gitkeep",path) ] # && !occursin("italy",path)
 const female_male_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) ] #(!occursin("sintomatici", path) && !occursin("positivi",path)) && && !occursin("italy",path) 
-const lombardy_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) && occursin("lombardy",path) ]
+const lombardy_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) && occursin("lombardy",path)]
 #const lombardy_positive_symptomatics_paths = reverse([path for path in input_paths if !occursin("maschi", path) && !occursin("femmine", path) && occursin("lombardia",path) && (occursin("positivi",path) || occursin("sintomatici",path))])
-const total_female_male_paths = length(female_male_paths_without_lombardy_positives_symptomatics)
+const total_female_male_paths = length(female_male_paths)
 
 # Store the paths pointing to the csv that were not able to be reduced to a single time series. These will be later attempted to be recovered from the sex-aggregated time series. Since we use multithreading, we instantiate failed_paths_multithread as suggested in https://stackoverflow.com/a/65715547/13110508
 ## So far, the ones that use to fail are
@@ -57,20 +61,23 @@ const total_female_male_paths = length(female_male_paths_without_lombardy_positi
 ## "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_symptomatic_female.csv"
 ## "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_symptomatic_male.csv"
 failed_paths_multithread = [String[] for i in 1:Threads.nthreads()] 
+reconstructed_csvs = Dict{String, DataFrame}()
 
-
+include("src/utilities.jl")
 # Multithreaded loop
 # Loop over all sex-disaggregayed paths except the nationals
-Threads.@threads for i in eachindex(female_male_paths_without_lombardy_positives_symptomatics)
-    input_path = female_male_paths_without_lombardy_positives_symptomatics[i]
+for i in eachindex(female_male_paths)   #Threads.@threads 
+    input_path = female_male_paths[i]
     output_name =  string(split(input_path, os_separator)[end])
     println("\nUnrolling $output_name ( $i \\ $total_female_male_paths) ...")
 
     # Reconstruct the time series
     incidence_dataframe = CSV.read(input_path,DataFrame)
+    initial_conditions_dataframe  = CSV.read(joinpath(path_to_initial_conditions, output_name ), DataFrame) 
     reconstructed_df::DataFrame = DataFrame()
     try
-        reconstructed_df = unroll_iss_infn(incidence_dataframe, n₋, n₊,nothing)
+        reconstructed_df = unroll_iss_infn(incidence_dataframe, n₋, n₊, nothing; initial_conditions_dataframe = initial_conditions_dataframe , skip_lines = skip_lines)
+        push!(reconstructed_csvs, output_name => reconstructed_df)
         save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
     catch e
         if isa(e, ErrorException)
@@ -83,6 +90,7 @@ Threads.@threads for i in eachindex(female_male_paths_without_lombardy_positives
         continue
     end
 end
+
 
 # Flatten 
 const failed_paths = vcat(failed_paths_multithread...)
@@ -135,6 +143,16 @@ const failed_paths = vcat(failed_paths_multithread...)
 #         continue
 #     end
 # end
+
+# Tidy the dataset to satisfy https://github.com/epiforecasts/covidregionaldata/issues/463#issuecomment-1066127594
+## Translated names of regions
+regions_italy_names = Dict("abruzzo" => "Abruzzo", "aosta_valley" => "Valle d'Aosta", "apulia" => "Puglia", "basilicata" => "Basilicata", "calabria" => "Calabria", "campania" => "Campania" , "emilia_romagna" => "Emilia-Romagna", "friuli_venice_giulia" => "Friuli Venezia Giulia", "lazio" => "Lazio", "liguria" => "Liguria", "lombardy" => "Lombardia", "marches" => "Marche", "molise" => "Molise", "pa_bolzano" => "P.A. Bolzano", "pa_trento" => "P.A. Trento", "piedmont" => "Piemonte", "sardinia" => "Sardegna", "sicily" => "Sicilia", "trentino_alto_adige" => "Trentino-Alto Adige", "tuscany" => "Toscana",  "umbria" => "Umbria", "veneto" => "Veneto" ,"italy" => "Italia" )
+## Output dataframe
+tidy_dataframe = get_tidy_dataframe(reconstructed_csvs, regions_italy_names)
+
+## Save tidied dataframe
+save_dataframe_to_csv(tidy_dataframe, "epiforecasts_covidregionaldata", COVID19-Italy-Integrated-Surveillance-Data.csv )
+# CSV.write("./epiforecasts_covidregionaldata/COVID19-Italy-Integrated-Surveillance-Data.csv", tidy_dataframe)
 
 
 # Paths to outputted .csvs with OS-specific file separators
@@ -192,7 +210,6 @@ for output_path in output_paths
     savefig(grid,joinpath(output_plots_dir_path,multiple_string_replace(output_female_name, ("_female" => "", ".csv" => "")) ))
     # Save the sex_aggregated_dataframe
     save_dataframe_to_csv( sex_aggregated_out_df,output_files_dir_path, replace(output_female_name, "_female" => ""))
-
     
 end
 
@@ -211,3 +228,6 @@ end
 
 ## select portion of horizontal_check_cases within those two dates
 # horizontal_check_cases = [x for x in skipmissing(horizontal_check_cases_df[!,"≥80 anni"][minimum_row_idx:maximum_row_idx])].+ [x for x in skipmissing(horizontal_check_cases_df[!,"altri"][minimum_row_idx:maximum_row_idx])]
+
+
+

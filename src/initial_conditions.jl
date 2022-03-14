@@ -11,11 +11,11 @@ using CSV
 # Get OS-specific sile path separator
 const os_separator = Base.Filesystem.path_separator
 
-## Path to input dir
-const path_to_processed_initial_conditions = "./2_input/initial_conditions"
-
 ## Path to raw initial conditions
 const path_to_raw_initial_conditions = "./raw_initial_conditions"
+
+## Path to input dir
+const path_to_processed_initial_conditions = "./2_input/initial_conditions"
 
 #const path_to_processed_initial_conditions = "2"
 
@@ -49,7 +49,7 @@ for csv_path in [path for path in readdir(path_to_raw_initial_conditions; join =
     println("csv_name = $csv_name \t translated_name = $translated_name")
 
     # Consider just  the first seven intensities
-    df = CSV.read(csv_path, DataFrame)[1:7, :]
+    df = CSV.read(csv_path, DataFrame)
     
     # Translate columns to english
     for col in names(df)
@@ -58,6 +58,6 @@ for csv_path in [path for path in readdir(path_to_raw_initial_conditions; join =
         end
     end
 
-    CSV.write(joinpath(path_to_processed_initial_conditions, translated_name ), df )
+    CSV.write(joinpath(path_to_processed_initial_conditions, translated_name ), df[1:6, :] )
 
 end
