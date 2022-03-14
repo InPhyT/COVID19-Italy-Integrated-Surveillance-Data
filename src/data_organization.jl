@@ -196,3 +196,6 @@ end
 # Make output folder structure
 mkpath(joinpath(output_dir_path, "data"))
 mkpath(joinpath(output_dir_path, "figures"))
+
+# Make epiforecasts_covidregionaldata folder
+mkpath(joinpath("./epiforecasts_covidregionaldata"))
