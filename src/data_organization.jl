@@ -13,6 +13,8 @@ using CSV
 const folder_structure_root_path = "./1_structured_archive" 
 ## Path to input dir
 const input_dir_path = "./2_input"
+## Path to output dir
+const output_dir_path = "./3_output"
 
 # Get OS-specific sile path separator
 const os_separator = Base.Filesystem.path_separator
@@ -190,3 +192,7 @@ const national_paths = filter(path -> occursin("italy",path), vcat(readdir(input
 for path in national_paths
     rm(path)
 end
+
+# Make output folder structure
+mkpath(joinath(output_dir_path, "data"))
+mkpath(joinath(output_dir_path, "figures"))
