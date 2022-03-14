@@ -238,39 +238,39 @@ function save_dataframe_to_csv( dataframe::DataFrame,save_dir_path::String, name
     CSV.write(complete_path, dataframe)
 end
 
+"""
+    get_tidy_dataframe(reconstructed_csvs::Dict{String, DataFrame},regions_italy_names::Dict{String,String} )
 
-function get_tidy_dataframe(reconstructed_csvs::Dict{String, DataFrame},regions_italy_names::Dict{String,String} ) # ::Tuple{Vararg{String}}
+Return the tidy version of the datasets, as requested by https://github.com/epiforecasts/covidregionaldata/issues/463#issuecomment-1066127594. 
+"""
+function get_tidy_dataframe(reconstructed_csvs::Dict{String, DataFrame},regions_italy_names::Dict{String,String} )
 
+    # Preallocate output
     tidy_dataframe = DataFrame(date = Date[], region = String[], gender = String[], age_cohort = String[], indicator = String[], count = Int64[])
+    # Gender conversions
     genders_conversion = Dict("female" => "F", "male" => "M")
+    # Indicators and their explicitations
+    indicators = ( "symptomatic", "hospitalizations", "deceased", "confirmed", "intensive_care")
+    indicators_explicit = Dict("symptomatic" => "symptomatic" , "hospitalizations"=> "ordinary_hospital_admission", "deceased" => "deceased", "confirmed" => "confirmed", "intensive_care" => "ICU_admission")
+    # Loop over each deconvoluted dataset
     for (file_name, dataframe) in collect(reconstructed_csvs)
-        #println("file_name = $file_name")
         ncols              = length(names(dataframe))-1
         age_classes        = collect(names(dataframe)[2:end])
-        #println("age_classes = $age_classes")
         file_name_splitted = split(file_name, "_")
         region             = filter(x -> occursin(x,file_name),  collect(keys(regions_italy_names)))
         if length(region) != 1
             error("region = $region, \tfile_name = $file_name")
         end
-        #println("region = $region, \toccursin('pa_trento',file_name) = $(occursin("pa_trento",file_name))")
         region_col         = repeat( [regions_italy_names[region[1]]], ncols * size(dataframe,1))
-        gender             = file_name_splitted[end][1:(end-4)] # filter(x -> occursin(x,file_name), ("male","female") )
+        gender             = file_name_splitted[end][1:(end-4)] 
         gender_col         = repeat([genders_conversion[gender]], ncols * size(dataframe,1))
-        #println("gender_col = $gender_col")
-        indicator          = file_name_splitted[end-1]
-        indicator_col      = repeat([indicator], ncols * size(dataframe,1))
-        age_cohort_col     = vcat([repeat([age_class], size(dataframe,1)) for age_class in age_classes]...) #vcat([age_class for i in 1:size(dataframe,1) ] for age_class in age_classes)
-        #println("age_cohort_col = $age_cohort_col")
+        indicator          = filter(x -> occursin(x,file_name), indicators )
+        @assert length(indicator) == 1
+        indicator_col      = repeat([indicators_explicit[indicator[1]]], ncols * size(dataframe,1))
+        age_cohort_col     = vcat([repeat([age_class], size(dataframe,1)) for age_class in age_classes]...) 
         date_col           = vcat(repeat(dataframe.date, ncols))
         count_col          = vcat([dataframe[!, col] for col in age_classes]...)
-        # sizehint!(counts_col,  ncols * size(dataframe,1))
-        # for col in age_classes
-        #     push!(count_col, dataframe[!, col])
-        # end
-        #println("file_name = $file_name, \tsize(dataframe) = $(size(dataframe)), \tregion = $region")
         append!(tidy_dataframe, DataFrame(date = date_col, region = region_col, gender = gender_col, age_cohort = age_cohort_col, indicator = indicator_col, count = count_col))
-    
     end
 
     # Remove rows where count == 0

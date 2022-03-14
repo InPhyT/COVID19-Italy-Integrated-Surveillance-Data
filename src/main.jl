@@ -77,7 +77,7 @@ for i in eachindex(female_male_paths)   #Threads.@threads
     try
         reconstructed_df = unroll_iss_infn(incidence_dataframe, n₋, n₊, nothing; initial_conditions_dataframe = initial_conditions_dataframe , skip_lines = skip_lines)
         push!(reconstructed_csvs, output_name => reconstructed_df)
-        save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
+        #save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
     catch e
         if isa(e, ErrorException)
             println(e.msg)
@@ -145,13 +145,12 @@ const failed_paths = vcat(failed_paths_multithread...)
 
 # Tidy the dataset to satisfy https://github.com/epiforecasts/covidregionaldata/issues/463#issuecomment-1066127594
 ## Translated names of regions
-regions_italy_names = Dict("abruzzo" => "Abruzzo", "aosta_valley" => "Valle d'Aosta", "apulia" => "Puglia", "basilicata" => "Basilicata", "calabria" => "Calabria", "campania" => "Campania" , "emilia_romagna" => "Emilia-Romagna", "friuli_venice_giulia" => "Friuli Venezia Giulia", "lazio" => "Lazio", "liguria" => "Liguria", "lombardy" => "Lombardia", "marches" => "Marche", "molise" => "Molise", "pa_bolzano" => "P.A. Bolzano", "pa_trento" => "P.A. Trento", "piedmont" => "Piemonte", "sardinia" => "Sardegna", "sicily" => "Sicilia", "trentino_alto_adige" => "Trentino-Alto Adige", "tuscany" => "Toscana",  "umbria" => "Umbria", "veneto" => "Veneto" ,"italy" => "Italia" )
+const regions_italy_names = Dict("abruzzo" => "Abruzzo", "aosta_valley" => "Valle d'Aosta", "apulia" => "Puglia", "basilicata" => "Basilicata", "calabria" => "Calabria", "campania" => "Campania" , "emilia_romagna" => "Emilia-Romagna", "friuli_venice_giulia" => "Friuli Venezia Giulia", "lazio" => "Lazio", "liguria" => "Liguria", "lombardy" => "Lombardia", "marches" => "Marche", "molise" => "Molise", "pa_bolzano" => "P.A. Bolzano", "pa_trento" => "P.A. Trento", "piedmont" => "Piemonte", "sardinia" => "Sardegna", "sicily" => "Sicilia", "trentino_alto_adige" => "Trentino-Alto Adige", "tuscany" => "Toscana",  "umbria" => "Umbria", "veneto" => "Veneto" ,"italy" => "Italia" )
 ## Output dataframe
-tidy_dataframe = get_tidy_dataframe(reconstructed_csvs, regions_italy_names)
+const tidy_dataframe = get_tidy_dataframe(reconstructed_csvs, regions_italy_names)
 
 ## Save tidied dataframe
 save_dataframe_to_csv(tidy_dataframe, "epiforecasts_covidregionaldata", "COVID19-Italy-Integrated-Surveillance-Data.csv" )
-# CSV.write("./epiforecasts_covidregionaldata/COVID19-Italy-Integrated-Surveillance-Data.csv", tidy_dataframe)
 
 
 # Paths to outputted .csvs with OS-specific file separators
