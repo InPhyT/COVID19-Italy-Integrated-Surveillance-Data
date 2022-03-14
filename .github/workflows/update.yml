@@ -58,7 +58,8 @@ jobs:
       # julia src/main.jl
       - name: Execute data_organization.jl and main.jl
         run: |
-          julia src/initial_conditions.jl
+          julia src/data_organization.jl
+          julia src/main.jl
 
 
 
