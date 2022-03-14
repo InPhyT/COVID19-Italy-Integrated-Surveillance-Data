@@ -194,5 +194,5 @@ for path in national_paths
 end
 
 # Make output folder structure
-mkpath(joinath(output_dir_path, "data"))
-mkpath(joinath(output_dir_path, "figures"))
+mkpath(joinpath(output_dir_path, "data"))
+mkpath(joinpath(output_dir_path, "figures"))
