@@ -150,7 +150,7 @@ regions_italy_names = Dict("abruzzo" => "Abruzzo", "aosta_valley" => "Valle d'Ao
 tidy_dataframe = get_tidy_dataframe(reconstructed_csvs, regions_italy_names)
 
 ## Save tidied dataframe
-save_dataframe_to_csv(tidy_dataframe, "epiforecasts_covidregionaldata", COVID19-Italy-Integrated-Surveillance-Data.csv )
+save_dataframe_to_csv(tidy_dataframe, "epiforecasts_covidregionaldata", "COVID19-Italy-Integrated-Surveillance-Data.csv" )
 # CSV.write("./epiforecasts_covidregionaldata/COVID19-Italy-Integrated-Surveillance-Data.csv", tidy_dataframe)
 
 
