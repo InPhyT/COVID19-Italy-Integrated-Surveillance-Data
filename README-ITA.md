@@ -107,25 +107,6 @@ Dal momento che minore sono i numeri coinvolti e meglio sembra performare Unroll
 
 Le serie temporali esattamente ricostruite sono poi salvate nella cartella [`3_output/data`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/data), mentre le visualizzazioni di quelle stratificate per età ed aggregate per sesso si trovano nella cartella [`3_output/figures`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/figures).
 
-### Limitazioni 
-
-Le serie temporali mediate startificate per sesso che UnrollingAverages.jl non è riuscito a restringere ad un unica serie originale sono le seguenti: 
-
-* `iss_age_date_lombardy_positive_female`: serie temporali giornaliere di **casi femminili confermati per data di diagnosi** stratificate per età in Lombardia ;
-* `iss_age_date_lombardy_positive_male`: serie temporali giornaliere di **casi maschili confermati per data di diagnosi** stratificate per età in Lombardia ;
-* `iss_age_date_lombardy_symptomatic_female`: serie temporali giornaliere di **casi femminili sintomatici per data di inizio sintomi** stratificate per età in Lombardia ;
-* `iss_age_date_lombardy_symptomatic_male`: serie temporali giornaliere di **casi maschili sintomatici per data di inizio sintomi** stratificate per età in Lombardia ;
-* `iss_age_date_emilia_romagna_positive_female`: serie temporali giornaliere di **casi femminili confermati per data di diagnosi** stratificate per età in Emilia Romagna;
-* `iss_age_date_emilia_romagna_positive_male`: serie temporali giornaliere di **casi maschili confermati per data di diagnosi** stratificate per età in Emilia Romagna .
-
-Sfortunatamente, per tutti i datasets aggregati per sesso corrispondenti:
-
-* `iss_age_date_lombardy_positive`;
-* `iss_age_date_lombardy_symptomatic`;
-* `iss_age_date_emilia_romagna_positive` 
-
-il vincolo di consistenza sezionale al momento fallisce, dal momento che il numero di combinazioni selezionate da UnrollingAverages.jl necessiterebbe di troppo tempo per essere effettivamente processate nonostante i numerosi miglioramenti di performance già implementati (e.g. si vedano i seguenti posts su Julia Discourse: [For loop optimization](https://discourse.julialang.org/t/for-loop-optimization/70700) and [How to improve performance in nested loops](https://discourse.julialang.org/t/how-to-improve-performance-in-nested-loops/70407)).
-
 ### Sviluppi Futuri 
 
 Il vincolo di consistenza sezionale potrebbe essere migliorato in uno dei seguenti modi: 

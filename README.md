@@ -107,24 +107,6 @@ Since the smaller the numbers involved the better UnrollingAverages.jl seems to 
 
 The successfully reconstructed time series are then saved in the [`3_output/data`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/data) folder (both aggregated and disaggregated by sex), while the visualisations of those that are age-stratified and sex-aggregated may be found in [`3_output/figures`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/figures).
 
-### Issues
-
-The sex-stratified averaged time series that UnrollingAverages.jl could not resolve to a unique original series are the following:
-
-* `iss_age_date_lombardy_positive_female`: daily time series of **confirmed female cases by date of diagnosis** stratified by age in Lombardy ;
-* `iss_age_date_lombardy_positive_male`: daily time series of **confirmed male cases by date of diagnosis** stratified by age in Lombardy ;
-* `iss_age_date_lombardy_symptomatic_female`: daily time series of **symptomatic female cases by date of symptoms onset** stratified by age in Lombardy ;
-* `iss_age_date_lombardy_symptomatic_male`: daily time series of **symptomatic male cases by date of symptoms onset** stratified by age in Lombardy ;
-* `iss_age_date_emilia_romagna_positive_female`: daily time series of **confirmed female cases by date of diagnosis** stratified by age in Emilia-Romagna;
-* `iss_age_date_emilia_romagna_positive_male`: daily time series of **confirmed male cases by date of diagnosis** stratified by age in Emilia-Romagna .
-
-Unfortunately, for all the corresponding sex-aggregated datasets: 
-* `iss_age_date_lombardy_positive`;
-* `iss_age_date_lombardy_symptomatic`;
-* `iss_age_date_emilia_romagna_positive` 
-
-the cross-sectional consistency constraint** currently fails, as the number of combinations returned by UnrollingAverages.jl would require too much time to process, despite multiple efforts that have already improved performance (e.g. see the following Julia Discourse posts: [For loop optimization](https://discourse.julialang.org/t/for-loop-optimization/70700) and [How to improve performance in nested loops](https://discourse.julialang.org/t/how-to-improve-performance-in-nested-loops/70407)).
-
 ### Future Developments
 
 We may improve the cross-sectional consistency constraint in one of the following ways:

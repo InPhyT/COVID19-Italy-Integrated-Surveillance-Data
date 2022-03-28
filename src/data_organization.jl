@@ -13,6 +13,8 @@ using CSV
 const folder_structure_root_path = "./1_structured_archive" 
 ## Path to input dir
 const input_dir_path = "./2_input"
+## Path to output dir
+const output_dir_path = "./3_output"
 
 # Get OS-specific sile path separator
 const os_separator = Base.Filesystem.path_separator
@@ -40,32 +42,32 @@ const translations = merge(regions_italy_names_translations,provinces_translatio
 ## Regular cases
 for dir in values(regular_infix_folderName_associations_en)
     if !isdir(joinpath(folder_structure_root_path, dir))
-        mkdir(joinpath(folder_structure_root_path,dir))
+        mkpath(joinpath(folder_structure_root_path,dir))
     end
 end
 ## "bydate" folders. csvs with infix may have regional stratification or provice stratification with rolling mean
 if !isdir(joinpath(folder_structure_root_path,"daily_incidences_by_province"))
-    mkdir(joinpath(folder_structure_root_path,"daily_incidences_by_province"))
+    mkpath(joinpath(folder_structure_root_path,"daily_incidences_by_province"))
 end
 if !isdir(joinpath(folder_structure_root_path,"daily_incidences_by_region"))
-    mkdir(joinpath(folder_structure_root_path,"daily_incidences_by_region"))
+    mkpath(joinpath(folder_structure_root_path,"daily_incidences_by_region"))
 end
 ## "byage" folders.  The infix may be "byage" or a both "byage" and "byage","istat"
 if !isdir(joinpath(folder_structure_root_path,"overall_prevalences_by_region_sex_age"))
-    mkdir(joinpath(folder_structure_root_path,"overall_prevalences_by_region_sex_age"))
+    mkpath(joinpath(folder_structure_root_path,"overall_prevalences_by_region_sex_age"))
 end
 if !isdir(joinpath(folder_structure_root_path,"relative_overall_prevalences_distributed_by_sex_age"))
-    mkdir(joinpath(folder_structure_root_path,"relative_overall_prevalences_distributed_by_sex_age"))
+    mkpath(joinpath(folder_structure_root_path,"relative_overall_prevalences_distributed_by_sex_age"))
 end
 
 ## "ratio" and "ratio_age"
 ### Ratio
 if !isdir(joinpath(folder_structure_root_path,"daily_incidences_ratios_by_region"))
-    mkdir(joinpath(folder_structure_root_path,"daily_incidences_ratios_by_region"))
+    mkpath(joinpath(folder_structure_root_path,"daily_incidences_ratios_by_region"))
 end
 ### ratio_age
 if !isdir(joinpath(folder_structure_root_path,"daily_incidences_ratios_by_age"))
-    mkdir(joinpath(folder_structure_root_path,"daily_incidences_ratios_by_age"))
+    mkpath(joinpath(folder_structure_root_path,"daily_incidences_ratios_by_age"))
 end
 
 # English column names
@@ -190,3 +192,10 @@ const national_paths = filter(path -> occursin("italy",path), vcat(readdir(input
 for path in national_paths
     rm(path)
 end
+
+# Make output folder structure
+mkpath(joinpath(output_dir_path, "data"))
+mkpath(joinpath(output_dir_path, "figures"))
+
+# Make epiforecasts_covidregionaldata folder
+mkpath(joinpath("./epiforecasts_covidregionaldata"))

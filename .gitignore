@@ -1,1 +1,4 @@
+/initial_conditions/
 /raw_initial_conditions/
+/processed_ground_truths/
+.~lock**

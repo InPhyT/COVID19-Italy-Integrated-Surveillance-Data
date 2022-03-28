@@ -6,12 +6,17 @@ name: update
 
 # Choose when the workflow should run
 ## Run the workflow at every push
-# on: [push]
+# on: 
+#   push:
+#     branches:
+#       - 'use_initial_conditions'
 ## Run the workflow every 6 minutes (see https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#scheduled-events)
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron:  '59 22 * * 3'
+    # Restrict execution to main branch
+    - branches: main
 # Workflows are made of concurrent jobs, and every job is made of sequenctial steps. Steps may invoce actions.
 jobs:
   # Name of the job
@@ -49,10 +54,15 @@ jobs:
         with:
           version: "1.6.4"
       ## Execute Julia files
+      # julia src/data_organization.jl
+      # julia src/main.jl
       - name: Execute data_organization.jl and main.jl
         run: |
           julia src/data_organization.jl
           julia src/main.jl
+
+
+
           
 
       # Commit and push
@@ -68,7 +78,7 @@ jobs:
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main  
+          branch: use_initial_conditions  
 
 
       # Get previous release's tag, increment its major version and use it to make a new release. New release has date and time in its body.
