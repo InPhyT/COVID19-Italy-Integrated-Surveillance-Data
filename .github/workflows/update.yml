@@ -78,7 +78,7 @@ jobs:
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: use_initial_conditions  
+          branch: main  
 
 
       # Get previous release's tag, increment its major version and use it to make a new release. New release has date and time in its body.
