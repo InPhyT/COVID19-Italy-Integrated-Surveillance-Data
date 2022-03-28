@@ -109,22 +109,7 @@ Le serie temporali esattamente ricostruite sono poi salvate nella cartella [`3_o
 
 ### Limitazioni 
 
-Le serie temporali mediate startificate per sesso che UnrollingAverages.jl non è riuscito a restringere ad un unica serie originale sono le seguenti: 
-
-* `iss_age_date_lombardy_positive_female`: serie temporali giornaliere di **casi femminili confermati per data di diagnosi** stratificate per età in Lombardia ;
-* `iss_age_date_lombardy_positive_male`: serie temporali giornaliere di **casi maschili confermati per data di diagnosi** stratificate per età in Lombardia ;
-* `iss_age_date_lombardy_symptomatic_female`: serie temporali giornaliere di **casi femminili sintomatici per data di inizio sintomi** stratificate per età in Lombardia ;
-* `iss_age_date_lombardy_symptomatic_male`: serie temporali giornaliere di **casi maschili sintomatici per data di inizio sintomi** stratificate per età in Lombardia ;
-* `iss_age_date_emilia_romagna_positive_female`: serie temporali giornaliere di **casi femminili confermati per data di diagnosi** stratificate per età in Emilia Romagna;
-* `iss_age_date_emilia_romagna_positive_male`: serie temporali giornaliere di **casi maschili confermati per data di diagnosi** stratificate per età in Emilia Romagna .
-
-Sfortunatamente, per tutti i datasets aggregati per sesso corrispondenti:
-
-* `iss_age_date_lombardy_positive`;
-* `iss_age_date_lombardy_symptomatic`;
-* `iss_age_date_emilia_romagna_positive` 
-
-il vincolo di consistenza sezionale al momento fallisce, dal momento che il numero di combinazioni selezionate da UnrollingAverages.jl necessiterebbe di troppo tempo per essere effettivamente processate nonostante i numerosi miglioramenti di performance già implementati (e.g. si vedano i seguenti posts su Julia Discourse: [For loop optimization](https://discourse.julialang.org/t/for-loop-optimization/70700) and [How to improve performance in nested loops](https://discourse.julialang.org/t/how-to-improve-performance-in-nested-loops/70407)).
+Attualmente il dataset in output non presenta limitazioni. Aggiorneremo questa sezione nel caso se ne manifestassero.
 
 ### Sviluppi Futuri 
 
@@ -176,3 +161,5 @@ Istituto Superiore di Sanità. [Dati Sorveglianza Integrata COVID-19 in Italia](
 * Starnini et al. (2021) [Impact of data accuracy on the evaluation of COVID-19 mitigation policies](https://www.doi.org/10.1017/dap.2021.25). *Data & Policy*, 3, E28. 
 * Zhang et al. (2021) [Data science approaches to confronting the COVID-19 pandemic: a narrative review](https://doi.org/10.1098/rsta.2021.0127). *Philosophical Transactions of the Royal Society A*
 * Vasiliauskaite et al. (2021) [On some fundamental challenges in monitoring epidemics](https://doi.org/10.1098/rsta.2021.0117). *Philosophical Transactions of the Royal Society A*
+* Kozlov (2022) [NIH issues a seismic mandate: share data publicly](https://doi.org/10.1038/d41586-022-00402-1). *Nature News*
+* Mathieu (2022) [Commit to transparent pandemic data — not fancy dashboards](https://doi.org/10.1038/d41586-022-00424-9). *Nature News*
