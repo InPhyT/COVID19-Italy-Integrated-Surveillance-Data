@@ -1,7 +1,3 @@
-"""
-"""
-isnegative(x::Int64) = x < 0
-
 
 """
     multiple_string_replace(str::String, replacements::Dict{String,String})
@@ -58,11 +54,21 @@ function unroll_iss_infn(iss_infn_dataframe::DataFrame, n₋::Int64, n₊::Int64
     reconstructed_incidences::Vector{Vector{Vector{Int64}}} = [unroll(moving_average,n₋ + n₊ +1; initial_conditions = initial_condition, assert_positive_integer = assert_positive_integer) for (moving_average,initial_condition) in zip(moving_averages,initial_conditions)]
 
     # Check that reconstructed time series have only positive figures
-    for reconstructed_incidences_age_class in reconstructed_incidences
+    for (age_class,moving_average,reconstructed_incidences_age_class) in zip(age_classes,moving_averages,reconstructed_incidences)
         for reconstructed_incidence in reconstructed_incidences_age_class
-            println( filter( x -> x < 0, reconstructed_incidence) )
+            # println( filter( x -> x < 0, reconstructed_incidence) )
 
-            @assert !(any(reconstructed_incidence .< 0))
+            #@assert !(any(reconstructed_incidence .< 0))
+            if any(reconstructed_incidence .< 0)
+                println("The reconstructed incidence for age_class $age_class has negative values, attempting to unroll it without using ICs...")
+                reconstructed_incidences_age_class = unroll(moving_average,n₋ + n₊ +1; assert_positive_integer = assert_positive_integer)
+                #println("hello", length(reconstructed_incidence))
+                if length(reconstructed_incidences_age_class) == 1 & all(reconstructed_incidences_age_class[1] .>= 0)
+                    println("Incidence successfully reconstructed without using ICs")
+                elseif length(reconstructed_incidences_age_class) > 1
+                    println("Could not reconstruct one and only incidence without using ICs, got $(length(reconstructed_incidences_age_class)) possibilities")
+                end
+            end
         end
     end
 

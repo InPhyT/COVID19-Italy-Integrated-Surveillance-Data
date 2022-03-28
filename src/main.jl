@@ -46,25 +46,19 @@ const os_separator = Base.Filesystem.path_separator
 
 const input_paths = readdir(input_dir_path; join = true, sort = false)
 # As per methodology, get all paths that contain "male" and "female", except those regarding italy (all incidences) or positive and symptomatic incidences in lombardy. These we know to cause problems, Those that can't be unqiuely determined are saved in a failed array, later used to try the corresponding non-sex stratified ones.
-const female_male_paths_without_lombardy_positives_symptomatics = [path for path in input_paths if ((!occursin("lombardy",path) && (occursin("male", path) || occursin("female", path))) || (occursin("lombardy",path) && (!occursin("symptomatic", path) && !occursin("confirmed",path)) && (occursin("male", path) || occursin("female", path)) )) && !occursin(".gitkeep",path) ] # && !occursin("italy",path)
+# const female_male_paths_without_lombardy_positives_symptomatics = [path for path in input_paths if ((!occursin("lombardy",path) && (occursin("male", path) || occursin("female", path))) || (occursin("lombardy",path) && (!occursin("symptomatic", path) && !occursin("confirmed",path)) && (occursin("male", path) || occursin("female", path)) )) && !occursin(".gitkeep",path) ] # && !occursin("italy",path)
 const female_male_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) ] #(!occursin("sintomatici", path) && !occursin("positivi",path)) && && !occursin("italy",path) 
-const lombardy_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) && occursin("lombardy",path)]
+#const lombardy_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) && occursin("lombardy",path)]
 #const lombardy_positive_symptomatics_paths = reverse([path for path in input_paths if !occursin("maschi", path) && !occursin("femmine", path) && occursin("lombardia",path) && (occursin("positivi",path) || occursin("sintomatici",path))])
 const total_female_male_paths = length(female_male_paths)
 
 # Store the paths pointing to the csv that were not able to be reduced to a single time series. These will be later attempted to be recovered from the sex-aggregated time series. Since we use multithreading, we instantiate failed_paths_multithread as suggested in https://stackoverflow.com/a/65715547/13110508
-## So far, the ones that use to fail are
-## "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_emilia_romegna_confirmed_female.csv"
-## "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_emilia_romegna_confirmed_male.csv"
-## "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_confirmed_female.csv"
-## "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_confirmed_male.csv"
-## "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_symptomatic_female.csv"
-## "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_symptomatic_male.csv"
 failed_paths_multithread = [String[] for i in 1:Threads.nthreads()] 
 reconstructed_csvs = Dict{String, DataFrame}()
 
 # Multithreaded loop
 # Loop over all sex-disaggregayed paths except the nationals
+include("utilities.jl")
 for i in eachindex(female_male_paths)   #Threads.@threads 
     input_path = female_male_paths[i]
     output_name =  string(split(input_path, os_separator)[end])
@@ -77,7 +71,7 @@ for i in eachindex(female_male_paths)   #Threads.@threads
     try
         reconstructed_df = unroll_iss_infn(incidence_dataframe, n₋, n₊, nothing; initial_conditions_dataframe = initial_conditions_dataframe , skip_lines = skip_lines)
         push!(reconstructed_csvs, output_name => reconstructed_df)
-        #save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
+        save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
     catch e
         if isa(e, ErrorException)
             println(e.msg)
@@ -105,43 +99,43 @@ const failed_paths = vcat(failed_paths_multithread...)
 
 
 
-# # Attempt unrollign of sex-aggregated time series for the datasets that couldn't be brought back to a single time series
-# ## Aggregate paths by sex
-# sex_aggregated_paths = unique([multiple_string_replace(failed_path, ("_male" => "", "_female" => "")) for failed_path  in failed_paths])
-# ## Compute total sex-aggregated paths to be unrolled
-# const total_sex_aggregated_paths = length(sex_aggregated_paths)
-# ## Loop over the sex aggregated paths
-# Threads.@threads for i in eachindex(sex_aggregated_paths)
-#     sex_aggregated_path = sex_aggregated_paths[i]
-#     # Name to be given to the output file
-#     output_name =  string(split(sex_aggregated_path, os_separator)[end])
-#     println("\nUnrolling $output_name ( $i \\ $total_sex_aggregated_paths) ...")
-#     # Load horizontal chack (if it exists)
-#     horizontal_check_cases::Union{Nothing,Vector{Int64}} = nothing
-#     try
+# Attempt unrollign of sex-aggregated time series for the datasets that couldn't be brought back to a single time series
+## Aggregate paths by sex
+sex_aggregated_paths = unique([multiple_string_replace(failed_path, ("_male" => "", "_female" => "")) for failed_path  in failed_paths])
+## Compute total sex-aggregated paths to be unrolled
+const total_sex_aggregated_paths = length(sex_aggregated_paths)
+## Loop over the sex aggregated paths
+Threads.@threads for i in eachindex(sex_aggregated_paths)
+    sex_aggregated_path = sex_aggregated_paths[i]
+    # Name to be given to the output file
+    output_name =  string(split(sex_aggregated_path, os_separator)[end])
+    println("\nUnrolling $output_name ( $i \\ $total_sex_aggregated_paths) ...")
+    # Load horizontal chack (if it exists)
+    horizontal_check_cases::Union{Nothing,Vector{Int64}} = nothing
+    try
         
-#         horizontal_check_cases = CSV.read( joinpath(region_incidences_dir, get_aggregated_dataframe_name_from_unaggragated_dataframe(output_name)), DataFrame)[!,"incidence"][(1+skip_lines):end]
+        horizontal_check_cases = CSV.read( joinpath(region_incidences_dir, get_aggregated_dataframe_name_from_unaggragated_dataframe(output_name)), DataFrame)[!,"incidence"][(1+skip_lines):end]
 
-#         println("Horizontal check series found")
-#     catch e
-#         println("Horizontal check series NOT found")
-#     end
-#     # Reconstruct the time series, optionally making use of the total cases check
-#     sex_aggregated_dataframe = CSV.read(sex_aggregated_path,DataFrame)
-#     reconstructed_df::DataFrame = DataFrame()
-#     try
-#         reconstructed_df = unroll_iss_infn(sex_aggregated_dataframe, n₋, n₊,horizontal_check_cases)
-#         save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
-#     catch e
-#         if isa(e, ErrorException)
-#             println(e.msg)
-#             continue
-#         else
-#             throw(e)
-#         end
-#         continue
-#     end
-# end
+        println("Horizontal check series found")
+    catch e
+        println("Horizontal check series NOT found")
+    end
+    # Reconstruct the time series, optionally making use of the total cases check
+    sex_aggregated_dataframe = CSV.read(sex_aggregated_path,DataFrame)
+    reconstructed_df::DataFrame = DataFrame()
+    try
+        reconstructed_df = unroll_iss_infn(sex_aggregated_dataframe, n₋, n₊,horizontal_check_cases)
+        save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
+    catch e
+        if isa(e, ErrorException)
+            println(e.msg)
+            continue
+        else
+            throw(e)
+        end
+        continue
+    end
+end
 
 # Tidy the dataset to satisfy https://github.com/epiforecasts/covidregionaldata/issues/463#issuecomment-1066127594
 ## Translated names of regions
