@@ -77,7 +77,7 @@ const column_names_translations = Dict(
 # daily_age_quantiles_by_status
 "Column1" => "date", 
 # daily_incidences_by_region_sex_age
-"0-9 anni" => "0_9", "10-19 anni" => "10_19", "20-29 anni" => "20_29", "30-39 anni" => "30_39", "40-49 anni" => "40_49", "50-59 anni" => "50_59", "60-69 anni" => "60_69", "70-79 anni" => "70_79", "80-89 anni" => "80_89", "≥90 anni" => "90_+", 
+"0-5 anni" => "0_5", "6-12 anni" => "6_12", "13-19 anni" => "13_19", "20-29 anni" => "20_29", "30-39 anni" => "30_39", "40-49 anni" => "40_49", "50-59 anni" => "50_59", "60-69 anni" => "60_69", "70-79 anni" => "70_79", "80-89 anni" => "80_89", "≥90 anni" => "90_+", 
 # daily_incidences_by_province # daily_incidences_by_region
 "casi" => "incidence", "casi_media7gg" => "incidence_7_days_moving_average",
 # daily_incidences_healthcare_workers_by_region
@@ -102,7 +102,7 @@ const column_names_translations = Dict(
 "DATADECESSO" => "date")
 
 # English age classes
-const age_classes_translations = Dict("0-9 anni" => "0_9", "10-19 anni" => "10_19", "20-29 anni" => "20_29", "30-39 anni" => "30_39", "40-49 anni" => "40_49", "50-59 anni" => "50_59", "60-69 anni" => "60_69", "70-79 anni" => "70_79", "80-89 anni" => "80_89", "≥90 anni" => "90_+")
+const age_classes_translations = Dict("0-5 anni" => "0_5", "6-12 anni" => "6_12", "13-19 anni" => "13_19", "20-29 anni" => "20_29", "30-39 anni" => "30_39", "40-49 anni" => "40_49", "50-59 anni" => "50_59", "60-69 anni" => "60_69", "70-79 anni" => "70_79", "80-89 anni" => "80_89", "≥90 anni" => "90_+")
 
 # Fill folder sructure with files from ./archive.
 ## Get all file names

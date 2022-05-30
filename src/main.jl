@@ -10,6 +10,7 @@ using Dates
 using UnrollingAverages
 using DataFrames,CSV
 using Plots
+using ProgressMeter
 # using LoopVectorization # To be implemented
 # using IfElse
 
@@ -37,7 +38,7 @@ const region_incidences_dir = raw"2_input/daily_incidences_by_region"
 ## Path to over80 incidences. Currently unused, it woudl allow for a slightly better total cases check.
 # const over80_horizontal_checks_dir_path = raw"./original_organized\ultra_ottantenni__daily_incidences_over80_by_region"
 ## Path to output folder
-const output_files_dir_path = raw"3_output/data/"
+const output_files_dir_path = raw"./3_output/data/"
 ## Get OS-specific file path separator
 const os_separator = Base.Filesystem.path_separator
 ## Path to processed ground truths
@@ -71,6 +72,9 @@ for i in eachindex(female_male_paths)   #Threads.@threads
     try
         reconstructed_df = unroll_iss_infn(incidence_dataframe, n₋, n₊, nothing; initial_conditions_dataframe = initial_conditions_dataframe , skip_lines = skip_lines)
         push!(reconstructed_csvs, output_name => reconstructed_df)
+        #println("saving to $(joinpath(output_files_dir_path,output_name))")
+        #CSV.write(joinpath( raw"E:\GitHub\COVID19-Italy-Integrated-Surveillance-Data\3_output\data",output_name), reconstructed_df)
+        
         save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
     catch e
         if isa(e, ErrorException)
@@ -98,19 +102,20 @@ const failed_paths = vcat(failed_paths_multithread...)
 # ]
 
 
-
+reconstructed_h_csvs = Dict{String, DataFrame}()
 # Attempt unrollign of sex-aggregated time series for the datasets that couldn't be brought back to a single time series
 ## Aggregate paths by sex
 sex_aggregated_paths = unique([multiple_string_replace(failed_path, ("_male" => "", "_female" => "")) for failed_path  in failed_paths])
 ## Compute total sex-aggregated paths to be unrolled
 const total_sex_aggregated_paths = length(sex_aggregated_paths)
 ## Loop over the sex aggregated paths
-Threads.@threads for i in eachindex(sex_aggregated_paths)
-    sex_aggregated_path = sex_aggregated_paths[i]
+for i in eachindex(sex_aggregated_paths) #Threads.@threads 
+    sex_aggregated_path = reverse(sex_aggregated_paths)[i]
     # Name to be given to the output file
     output_name =  string(split(sex_aggregated_path, os_separator)[end])
     println("\nUnrolling $output_name ( $i \\ $total_sex_aggregated_paths) ...")
     # Load horizontal chack (if it exists)
+    
     horizontal_check_cases::Union{Nothing,Vector{Int64}} = nothing
     try
         
@@ -122,10 +127,17 @@ Threads.@threads for i in eachindex(sex_aggregated_paths)
     end
     # Reconstruct the time series, optionally making use of the total cases check
     sex_aggregated_dataframe = CSV.read(sex_aggregated_path,DataFrame)
+    female_output_name = split(output_name, ".")[1]*"_female.csv"
+    male_output_name = split(output_name, ".")[1]*"_male.csv"
+    initial_conditions_female =  CSV.read(joinpath(path_to_initial_conditions, female_output_name ),DataFrame)
+    initial_conditions_male =  CSV.read(joinpath(path_to_initial_conditions,   male_output_name ),DataFrame)
+    initial_conditions_dataframe = DataFrame(Dict(col => initial_conditions_female[!,col] .+ initial_conditions_male[!,col] for col in names(initial_conditions_female) if col ∉ ["date"] ))
+    println(initial_conditions_dataframe, "\n", )
     reconstructed_df::DataFrame = DataFrame()
     try
-        reconstructed_df = unroll_iss_infn(sex_aggregated_dataframe, n₋, n₊,horizontal_check_cases)
-        save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
+        reconstructed_df = unroll_iss_infn(sex_aggregated_dataframe, n₋, n₊,horizontal_check_cases;  initial_conditions_dataframe = initial_conditions_dataframe , skip_lines = skip_lines)
+        push!(reconstructed_h_csvs, output_name => reconstructed_df)
+        #save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
     catch e
         if isa(e, ErrorException)
             println(e.msg)
@@ -136,6 +148,7 @@ Threads.@threads for i in eachindex(sex_aggregated_paths)
         continue
     end
 end
+
 
 # Tidy the dataset to satisfy https://github.com/epiforecasts/covidregionaldata/issues/463#issuecomment-1066127594
 ## Translated names of regions

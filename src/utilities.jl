@@ -47,7 +47,7 @@ function unroll_iss_infn(iss_infn_dataframe::DataFrame, n₋::Int64, n₊::Int64
     # Get the columns to be deaveraged
     age_classes = filter( x -> x != "date", names(iss_infn_dataframe)) 
     moving_averages::Vector{Vector{Float64}} = [[x  for x in skipmissing(iss_infn_dataframe[:,age_class]) ] for age_class in age_classes ]
-    initial_conditions::Vector{Tuple{Vararg{Int64}}} = [ Tuple(initial_conditions_dataframe[:,age_class])  for age_class in age_classes ]
+    initial_conditions::Vector{Union{Nothing,Tuple{Vararg{Int64}}}} = [ !isnothing(initial_conditions_dataframe) ? Tuple(initial_conditions_dataframe[:,age_class]) : nothing  for age_class in age_classes ]
 
     #println("minimum_windows_total_cases  =  ", [moving_average[argmin(moving_average)] * (n₋ + n₊ +1 ) for moving_average in moving_averages])
     # Call unroll on each moving average so that it dispatches to `unroll_iterative`
@@ -55,22 +55,22 @@ function unroll_iss_infn(iss_infn_dataframe::DataFrame, n₋::Int64, n₊::Int64
 
     # Check that reconstructed time series have only positive figures
     # for (age_class,moving_average,reconstructed_incidences_age_class) in zip(age_classes,moving_averages,reconstructed_incidences)
-    for i in eachindex(reconstructed_incidences)
-        # for reconstructed_incidence in reconstructed_incidences[i] #reconstructed_incidences_age_class
-        # println( filter( x -> x < 0, reconstructed_incidence) )
+    if !isnothing(initial_conditions_dataframe)
+        for i in eachindex(reconstructed_incidences)
+            # for reconstructed_incidence in reconstructed_incidences[i] #reconstructed_incidences_age_class
+            # println( filter( x -> x < 0, reconstructed_incidence) )
 
-        #@assert !(any(reconstructed_incidence .< 0))
-        if any(reconstructed_incidences[i][1] .< 0)
-            println("The reconstructed incidence for age_class $(age_classes[i]) has negative values, attempting to unroll it without using ICs...")
-            reconstructed_incidences[i] = unroll(moving_averages[i],n₋ + n₊ +1; assert_positive_integer = assert_positive_integer) #reconstructed_incidences_age_class
-            #println("hello", length(reconstructed_incidence))
-            if length(reconstructed_incidences[i]) == 1 & all(reconstructed_incidences[i][1] .>= 0)
-                println("Incidence successfully reconstructed without using ICs")
-            elseif length(reconstructed_incidences[i]) > 1
-                println("Could not reconstruct one and only incidence without using ICs, got $(length(reconstructed_incidences[i])) possibilities")
+            #@assert !(any(reconstructed_incidence .< 0))
+            if any(reconstructed_incidences[i][1] .< 0)
+                println("The reconstructed incidence for age_class $(age_classes[i]) has negative values, attempting to unroll it without using ICs...")
+                reconstructed_incidences[i] = unroll(moving_averages[i],n₋ + n₊ +1; assert_positive_integer = assert_positive_integer) 
+                if length(reconstructed_incidences[i]) == 1 & all(reconstructed_incidences[i][1] .>= 0)
+                    println("Incidence successfully reconstructed without using ICs")
+                elseif length(reconstructed_incidences[i]) > 1
+                    println("Could not reconstruct one and only incidence without using ICs, got $(length(reconstructed_incidences[i])) possibilities")
+                end
             end
         end
-        # end
     end
 
     # Preallocate the array that will contain the accepted combinations of `reconstructed_incidences`
@@ -91,11 +91,11 @@ function unroll_iss_infn(iss_infn_dataframe::DataFrame, n₋::Int64, n₊::Int64
         accepted_possibilities_combinations = Vector{Vector{Int64}}[]
         
         #https://discourse.julialang.org/t/for-loop-optimization/70700/4
-        for (k,possibilities_combination) in enumerate(possibilities_combinations_iterator)
-            if k%1000000 == 0
-                println("horizontal check. Done $k \\ $l , ", k/l )
-                println("length(accepted_possibilities_combinations) = ", length(accepted_possibilities_combinations))
-            end
+        @showprogress 1 for (k,possibilities_combination) in enumerate(possibilities_combinations_iterator)
+            # if k%1000000 == 0
+            #     println("horizontal check. Done $k \\ $l , ", k/l )
+            #     println("length(accepted_possibilities_combinations) = ", length(accepted_possibilities_combinations))
+            # end
             success = true
             c_1, c_2, c_3, c_4, c_5, c_6, c_7, c_8, c_9, c_10  = possibilities_combination
             
@@ -107,6 +107,7 @@ function unroll_iss_infn(iss_infn_dataframe::DataFrame, n₋::Int64, n₊::Int64
             end
             if success
                 push!(accepted_possibilities_combinations, collect(possibilities_combination))
+                break
             end
         end
 
@@ -241,7 +242,7 @@ end
 Save DataFrame `dataframe` to directory `dir` with name `name`.
 """
 function save_dataframe_to_csv( dataframe::DataFrame,save_dir_path::String, name::String)
-    complete_path::String = joinpath(save_dir_path, name)
+    complete_path = joinpath(save_dir_path, name)
     CSV.write(complete_path, dataframe)
 end
 
