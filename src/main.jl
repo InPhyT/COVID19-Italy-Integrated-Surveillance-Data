@@ -201,7 +201,7 @@ for output_path in output_paths
     plots = []
     ## Sex-aggregated dataframe to be saved to 3_output/data
     sex_aggregated_out_df = DataFrame(date = intersect_dates_out)
-    for (col,color) in zip(names(female_out_df[!, Not("date")]),palette(:tab10))
+    for (col,color) in zip(names(female_out_df[!, Not("date")]),palette(:tab20))
         subplot_title = multiple_string_replace(col, ("_+"=>"+","_" => "-"))
         col_sym = Symbol(col)
         aggregated_column = female_out_df[in.(female_out_df.date, Ref(intersect_dates_out)),col] .+ male_out_df[in.(male_out_df.date, Ref(intersect_dates_out)),col]
