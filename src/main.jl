@@ -206,12 +206,12 @@ for output_path in output_paths
         col_sym = Symbol(col)
         aggregated_column = female_out_df[in.(female_out_df.date, Ref(intersect_dates_out)),col] .+ male_out_df[in.(male_out_df.date, Ref(intersect_dates_out)),col]
         @eval $sex_aggregated_out_df.$col_sym  = $aggregated_column
-        p = plot(title = subplot_title, size = (2500,1500))
+        p = plot(title = subplot_title, size = (2500,1500), legend = :topleft)
         plot!(intersect_dates_out,eval(:($sex_aggregated_out_df.$col)), label = "Reconstructed Series", seriestype = :scatter, color = color, markerstrokewidth = 0.3, fillalpha = 0.1 ) #xrotation=45  
         plot!(intersect_dates_inp,female_inp_df[in.(female_inp_df.date, Ref(intersect_dates_inp)),col] .+ male_inp_df[in.(male_inp_df.date, Ref(intersect_dates_inp)),col], label = "Moving Average", color = color, lw = 4  )
         push!(plots,p)
     end
-    grid = plot(plots..., layout = (5,2), plot_title  = multiple_string_replace(output_female_name, ("_female" => "", ".csv" => "")) )#dpi = 100
+    grid = plot(plots..., layout = (11,1), plot_title  = multiple_string_replace(output_female_name, ("_female" => "", ".csv" => "")) )#dpi = 100
     savefig(grid,joinpath(output_plots_dir_path,multiple_string_replace(output_female_name, ("_female" => "", ".csv" => "")) ))
     # Save the sex_aggregated_dataframe
     save_dataframe_to_csv( sex_aggregated_out_df,output_files_dir_path, replace(output_female_name, "_female" => ""))

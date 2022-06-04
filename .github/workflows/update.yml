@@ -6,17 +6,17 @@ name: update
 
 # Choose when the workflow should run
 ## Run the workflow at every push
-# on: 
-#   push:
-#     branches:
-#       - 'main'
+on: 
+  push:
+    branches:
+      - 'main'
 ## Run the workflow every 6 minutes (see https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#scheduled-events)
-on:
- schedule:
-   # * is a special character in YAML so you have to quote this string
-   - cron:  '59 22 * * 3'
-   # Restrict execution to main branch
-  #  - branches: main
+# on:
+#  schedule:
+#    # * is a special character in YAML so you have to quote this string
+#    - cron:  '59 22 * * 3'
+#    # Restrict execution to main branch
+#   #  - branches: main
 # Workflows are made of concurrent jobs, and every job is made of sequenctial steps. Steps may invoce actions.
 jobs:
   # Name of the job
