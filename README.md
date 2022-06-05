@@ -71,23 +71,23 @@ The output data has been stored [here](https://github.com/InPhyT/COVID19-Italy-I
 
 * Reconstructed daily time series of **confirmed cases by date of diagnosis** stratified by sex and age at the regional level;
 
-![lazio-confirmed](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_confirmed.png)
+![lombardy-confirmed](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_confirmed.png)
 
 * Reconstructed daily time series of **symptomatic cases by date of symptoms onset** stratified by sex and age at the regional level;
 
-![lazio-symptomatic](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_symptomatic.png)
+![lombardy-symptomatic](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_symptomatic.png)
 
 * Reconstructed daily time series of **ordinary hospital admissions** by date of admission stratified by sex and age at the regional level;
 
-![lazio-hospitalized](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_hospitalizations.png)
+![lombardy-hospitalized](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_hospitalizations.png)
 
 * Reconstructed daily time series of **intensive hospital admissions** by date of admission stratified by sex and age at the regional level;
 
-![lazio-icu](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_intensive_care.png)
+![lombardy-icu](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_intensive_care.png)
 
 * Reconstructed daily time series of **deceased cases by date of death** stratified by sex and age at the regional level.
 
-![lazio-deceased](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_deceased.png)
+![lombardy-deceased](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_deceased.png)
 
 ## Methodology 
 

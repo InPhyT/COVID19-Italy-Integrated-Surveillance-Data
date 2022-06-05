@@ -71,23 +71,23 @@ I dati di output sono stati archiviati [qui](https://github.com/InPhyT/COVID19-I
 
 * Serie temporali giornaliere ricostruite di **casi confermati per data di diagnosi** stratificati per sesso ed età a livello regionale;
 
-![lazio-confermati](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_confirmed.png)
+![lombardy-confermati](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_confirmed.png)
 
 * Serie temporali giornaliere ricostruite di **casi sintomatici per data di inizio sintomi** stratificati per sesso ed età a livello regionale;
 
-![lazio-sintomatici](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_symptomatic.png)
+![lombardy-sintomatici](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_symptomatic.png)
 
 * Serie temporali giornaliere ricostruite di **ammissioni ospedaliere ordinarie per data di ammissione** stratificati per sesso ed età a livello regionale;
 
-![lazio-ospedalizzati](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_hospitalizations.png)
+![lombardy-ospedalizzati](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_hospitalizations.png)
 
 * Serie temporali giornaliere ricostruite di **ammissioni ospedaliere intensive per data di ammissione** stratificati per sesso ed età a livello regionale;
 
-![lazio-icu](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_intensive_care.png)
+![lombardy-icu](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_intensive_care.png)
 
 * Serie temporali giornaliere ricostruite di **casi deceduti per data di decesso** stratificati per sesso ed età a livello regionale.
 
-![lazio-deceduti](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lazio_deceased.png)
+![lombardy-deceduti](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/blob/main/3_output/figures/iss_age_date_lombardy_deceased.png)
 
 ## Metodologia
 
