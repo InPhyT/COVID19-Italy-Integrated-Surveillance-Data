@@ -55,14 +55,14 @@ I dati di input sono stati archiviati [qui](https://github.com/InPhyT/COVID19-It
 
 * Dati aggregati nella cartella [`daily_incidences_by_region`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region):
   * Serie temporali giornaliere e in media mobile settimanale di **casi confermati per data di inizio sintomi** a livello regionale;
-  * Serie temporali giornaliere e in media mobile settimanale di **ammisioni ordinarie per data di ammissione** a livello regionale;
-  * Serie temporali giornaliere e in media mobile settimanale di **ammisioni intensive per data di ammissione** a livello regionale;
+  * Serie temporali giornaliere e in media mobile settimanale di **ammissioni ordinarie per data di ammissione** a livello regionale;
+  * Serie temporali giornaliere e in media mobile settimanale di **ammissioni intensive per data di ammissione** a livello regionale;
   * Serie temporali giornaliere e in media mobile settimanale di **casi deceduti per data di decesso** a livello regionale.
 * Dati disaggregati nella cartella [`daily_incidences_by_region_sex_age`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region_sex_age):
   * Serie temporali in media mobile settimanale di **casi sintomatici per data di inizio sintomi** stratificati per sesso ed età a livello regionale;
   * Serie temporali in media mobile settimanale di **casi confermati per data di diagnosi** stratificati per sesso ed età a livello regionale;
-  * Serie temporali in media mobile settimanale di **ammisioni ordinarie per data di ammissione** stratificati per sesso ed età a livello regionale;
-  * Serie temporali in media mobile settimanale di **ammisioni intensive per data di ammissione** stratificati per sesso ed età a livello regionale;
+  * Serie temporali in media mobile settimanale di **ammissioni ordinarie per data di ammissione** stratificati per sesso ed età a livello regionale;
+  * Serie temporali in media mobile settimanale di **ammissioni intensive per data di ammissione** stratificati per sesso ed età a livello regionale;
   * Serie temporali in media mobile settimanale di **casi deceduti per data di decesso** stratificati per sesso ed età a livello regionale.
 
 ### Output 
@@ -103,7 +103,7 @@ L'intera procedura è effettuata mediante l'esecuzione dello script [main.jl](ht
 
 Le serie temporali mediate che devono essere **srotolate** (i.e. recuperate, ricostruite) sono quelle archiviate nella cartella [`2_input/daily_incidences_by_region_sex_age`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region_sex_age): sono organizzate in file in formato .csv, ognuno dei quali contenente le 10 serie specifiche per le classi d'età di una particolare incidenza in una particolare regione. Ogni dataset ha altri due datasets associati che sono ulteriormente stratificati per sesso.
 
-Dal momento che minore sono i numeri coinvolti e meglio sembra performare UnrollingAverages.jl, abbiamo optato per ricostruire prima le serie stratificate per sesso ed aggregarle in seguito. Poiché non tutte le serie mediate stratificate per sesso ed età permettono ad UnrollingAverages.jl di trovare un'unica serie originale e poiché INFN non fornisce alcuna ulteriore informazione stratificata per sesso, abbiamo provato a ricostruire direttamente le serie aggregate per sesso per cui INFN fornisce informazioni addizionali nella forma di serie originali aggregate per età, che abbiamo utilizzato per selezionare la combinazione di serie disaggregate per età proposte da UnrollingAverages.jl che sommasse a quella aggregata per età. I datasets aggregati così utilizzati si trovano nella cartella [`2_input/daily_incidences_by_region`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region) folder. Ci riferiremo all'algoritmo di selezione appena descritto con **vincolo di consistenza sezionale**. 
+Dal momento che minore sono i numeri coinvolti e meglio sembra performare UnrollingAverages.jl, abbiamo optato per ricostruire prima le serie stratificate per sesso ed aggregarle in seguito. Poiché non tutte le serie mediate stratificate per sesso ed età permettono ad UnrollingAverages.jl di trovare un'unica serie originale e poiché INFN non fornisce alcuna ulteriore informazione stratificata per sesso, abbiamo provato a ricostruire direttamente le serie aggregate per sesso per cui INFN fornisce informazioni addizionali nella forma di serie originali aggregate per età, che abbiamo utilizzato per selezionare la combinazione di serie disaggregate per età proposte da UnrollingAverages.jl che sommasse a quella aggregata per età. I datasets aggregati così utilizzati si trovano nella cartella [`2_input/daily_incidences_by_region`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/2_input/daily_incidences_by_region). Ci riferiremo all'algoritmo di selezione appena descritto con **vincolo di consistenza sezionale**. 
 
 Le serie temporali esattamente ricostruite sono poi salvate nella cartella [`3_output/data`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/data), mentre le visualizzazioni di quelle stratificate per età ed aggregate per sesso si trovano nella cartella [`3_output/figures`](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/3_output/figures).
 
@@ -113,7 +113,7 @@ Il vincolo di consistenza sezionale potrebbe essere migliorato in uno dei seguen
 
 * Utilizzando cicli in modalità multi-threading, prendendo ispirazione da [questo post su Julia Discourse](https://discourse.julialang.org/t/multithreading-for-nested-loops/36002);
 * Utilizzando [LoopVectorization.jl](https://github.com/JuliaSIMD/LoopVectorization.jl) nel ciclo for principale;
-* Implementando un problema multi-obiettivo dove gli obiettivi sono le 10 medie mobili e where the objectives are the 10 moving averages e il vincolo di consistenza sezionale, per cui potremmo fare uso dell'implementazione del [Borg-MOEA](http://borgmoea.org/) di [BlackBoxOptim.jl](https://github.com/robertfeldt/BlackBoxOptim.jl) o un algoritmo di [Metaheuristics.jl](https://github.com/jmejia8/Metaheuristics.jl) .
+* Implementando un problema multi-obiettivo dove gli obiettivi sono le 10 medie mobili e il vincolo di consistenza sezionale, per cui potremmo fare uso dell'implementazione del [Borg-MOEA](http://borgmoea.org/) di [BlackBoxOptim.jl](https://github.com/robertfeldt/BlackBoxOptim.jl) o un algoritmo di [Metaheuristics.jl](https://github.com/jmejia8/Metaheuristics.jl) .
 
 ## Come Contribuire
 
@@ -151,7 +151,8 @@ Istituto Superiore di Sanità. [Dati Sorveglianza Integrata COVID-19 in Italia](
 
 ### Letteratura Scientifica
 
-* Jackson et al. (2019) [Value of Information: Sensitivity Analysis and Research Design in Bayesian Evidence Synthesis](https://doi.org/10.1080/01621459.2018.1562932) *Journal of the American Statistical Association*
+* Polosky et al. (2019) [Outbreak analytics: a developing data science for informing the response to emerging pathogens](https://doi.org/10.1098/rstb.2018.0276). *Philosophical Transactions of the Royal Society B*
+* Jackson et al. (2019) [Value of Information: Sensitivity Analysis and Research Design in Bayesian Evidence Synthesis](https://doi.org/10.1080/01621459.2018.1562932). *Journal of the American Statistical Association*
 * Pearce et al. (2020) [Accurate Statistics on COVID-19 Are Essential for Policy Guidance and Decisions](https://ajph.aphapublications.org/doi/abs/10.2105/AJPH.2020.305708) *American Journal of Public Health*
 * Del Manso et al. (2020) [COVID-19 integrated surveillance in Italy: outputs and related activities](https://doi.org/10.19191/EP20.5-6.S2.105). *Epidemiologia & Prevenzione*
 * Sherratt et al. (2021) [Exploring surveillance data biases when estimating the reproduction number: with insights into subpopulation transmission of COVID-19 in England](http://doi.org/10.1098/rstb.2020.0283) *Philosophical Transactions of the Royal Society B*

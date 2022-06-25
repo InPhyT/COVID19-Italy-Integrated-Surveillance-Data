@@ -32,7 +32,7 @@ Every week the National Institute for Nuclear Physics ([INFN](https://home.infn.
 
 The original [data](https://covid19.infn.it/iss/) has been stored [here](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/0_archive), reorganised [here](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/1_structured_archive) and its contents are summarised in the following table: 
 
-| Collection                                                   | Symptimatic cases | Confirmed cases | Ordinary hospital admissions | Intensive hospital admission | Deceased cases | National level | Regional level | Provincial level | Age stratification | Sex stratification | Raw  time series | Averaged time series |
+| Collection                                                   | Symptomatic cases | Confirmed cases | Ordinary hospital admissions | Intensive hospital admission | Deceased cases | National level | Regional level | Provincial level | Age stratification | Sex stratification | Raw  time series | Averaged time series |
 | ------------------------------------------------------------ | :---------------: | :-------------: | :--------------------------: | :--------------------------: | :------------: | :------------: | :------------: | :--------------: | :----------------: | :----------------: | :--------------: | :------------------: |
 | [Daily incidences at national and regional level](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/1_structured_archive/daily_incidences_by_region) |                   |        ✅        |              ✅               |              ✅               |       ✅        |       ✅        |       ✅        |                  |                    |                    |        ✅         |          ✅           |
 | [Daily incidences at provincial level](https://github.com/InPhyT/COVID19-Italy-Integrated-Surveillance-Data/tree/main/1_structured_archive/daily_incidences_by_province) |                   |        ✅        |              ✅               |              ✅               |       ✅        |                |                |        ✅         |                    |                    |        ✅         |          ✅           |
@@ -151,6 +151,7 @@ Istituto Superiore di Sanità. [COVID-19 Integrated Surveillance Data in Italy](
 
 ### Scientific Literature 
 
+* Polosky et al. (2019) [Outbreak analytics: a developing data science for informing the response to emerging pathogens](https://doi.org/10.1098/rstb.2018.0276). *Philosophical Transactions of the Royal Society B*
 * Jackson et al. (2019) [Value of Information: Sensitivity Analysis and Research Design in Bayesian Evidence Synthesis](https://doi.org/10.1080/01621459.2018.1562932) *Journal of the American Statistical Association*
 * Pearce et al. (2020) [Accurate Statistics on COVID-19 Are Essential for Policy Guidance and Decisions](https://ajph.aphapublications.org/doi/abs/10.2105/AJPH.2020.305708) *American Journal of Public Health*
 * Del Manso et al. (2020) [COVID-19 integrated surveillance in Italy: outputs and related activities](https://doi.org/10.19191/EP20.5-6.S2.105). *Epidemiologia & Prevenzione*
