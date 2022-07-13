@@ -24,10 +24,12 @@ La nostra richiesta consiste nell'ulteriore stratificazione delle incidenze ripo
 * `0_positività_1_dosi`: casi a cui è stata diagnosticata COVID-19 `0` volte ed è stata somministrata `1` dose da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`); 
 * `0_positività_2_dosi`: casi a cui è stata diagnosticata COVID-19 `0` volte e sono state somministrate `2` dosi da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`); 
 * `0_positività_3_dosi`: casi a cui è stata diagnosticata COVID-19 `0` volte e sono state somministrate `3` dosi da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`); 
+* `0_positività_4_dosi`: casi a cui è stata diagnosticata COVID-19 `0` volte e sono state somministrate `4` dosi da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`); 
 * `1_positività_0_dosi`: casi a cui è stata diagnosticata COVID-19 `1` volta e sono state somministrate `0` dosi da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`); 
 * `1_positività_1_dosi`: casi a cui è stata diagnosticata COVID-19 `1` volta ed è stata somministrata  `1` dose da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`); 
 * `1_positività_2_dosi`: casi a cui è stata diagnosticata COVID-19 `1` volta e sono state somministrate `2` dosi da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`); 
-* `1_positività_3_dosi`: casi a cui è stata diagnosticata COVID-19 `1` volta e sono state somministrate `3` dosi da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`).
+* `1_positività_3_dosi`: casi a cui è stata diagnosticata COVID-19 `1` volta e sono state somministrate `3` dosi da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`);
+* `1_positività_4_dosi`: casi a cui è stata diagnosticata COVID-19 `1` volta e sono state somministrate `4` dosi da almeno 14 giorni dalla data di evento notevole (i.e. `inizio_sintomi`, `diagnosi`, `ammissione_ordinaria`, `ammissione_intensiva`, `decesso`).
 
 ### Variante genetica 
 
