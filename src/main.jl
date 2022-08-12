@@ -35,7 +35,7 @@ const input_dir_path = raw"2_input/daily_incidences_by_region_sex_age"
 const path_to_initial_conditions = raw"./2_input/initial_conditions"
 ## Path to regional incidences, for total cases check
 const region_incidences_dir = raw"2_input/daily_incidences_by_region"
-## Path to over80 incidences. Currently unused, it woudl allow for a slightly better total cases check.
+## Path to over80 incidences. Currently unused, it would allow for a slightly better total cases check.
 # const over80_horizontal_checks_dir_path = raw"./original_organized\ultra_ottantenni__daily_incidences_over80_by_region"
 ## Path to output folder
 const output_files_dir_path = raw"./3_output/data/"
@@ -96,8 +96,8 @@ end
 const failed_paths = vcat(failed_paths_multithread...)
 
 # const failed_paths = [
-# "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_emilia_romegna_confirmed_female.csv"
-# ,"./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_emilia_romegna_confirmed_male.csv"
+# "./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_emilia_romagna_confirmed_female.csv"
+# ,"./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_emilia_romagna_confirmed_male.csv"
 # ,"./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_confirmed_female.csv"
 # ,"./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_confirmed_male.csv"
 # ,"./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_symptomatic_female.csv"
@@ -258,7 +258,7 @@ for output_path in output_paths
 end
 
 ## using over80 data for a stratified (over and under 80y) horizontal check
-## load the dataframe with the averaged time series to deaverage
+## load the dataframe with the averaged time series to deconvolve
 # averaged_df = CSV.read( input_path, DataFrame)
 
 ## load the corresponding over80 dataset
