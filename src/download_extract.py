@@ -9,5 +9,3 @@ response = requests.get(url, stream=True)
 # Extract and save the datasets to folder 0_archive
 file = tarfile.open(fileobj=response.raw, mode="r|gz")
 file.extractall(path=os.path.join(os.getcwd(),"0_archive"))
-
-

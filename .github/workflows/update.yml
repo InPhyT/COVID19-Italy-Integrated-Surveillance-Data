@@ -1,4 +1,4 @@
-# This workflow file is responsile for downloading the .tar.gzip file from https://covid19.infn.it/, running the scripts that decompress and process it, committing the results and creating a release.
+# This workflow file is responsible for downloading the .tar.gzip file from https://covid19.infn.it/, running the scripts that decompress and process it, committing the results and creating a release.
 # For more information about workflows, see the GitHub documentation: https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
 
 # Name of this workflow
@@ -17,7 +17,7 @@ on:
    - cron:  '59 22 * * 3'
    # Restrict execution to main branch
   #  - branches: main
-# Workflows are made of concurrent jobs, and every job is made of sequenctial steps. Steps may invoce actions.
+# Workflows are made of concurrent jobs, and every job is made of sequential steps. Steps may invoke actions.
 jobs:
   # Name of the job
   build:
