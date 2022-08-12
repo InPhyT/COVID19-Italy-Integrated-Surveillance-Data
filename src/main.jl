@@ -48,15 +48,15 @@ const input_paths = readdir(input_dir_path; join = true, sort = false)
 # As per methodology, get all paths that contain "male" and "female", except those regarding italy (all incidences) or positive and symptomatic incidences in lombardy. These we know to cause problems, Those that can't be unqiuely determined are saved in a failed array, later used to try the corresponding non-sex stratified ones.
 # const female_male_paths_without_lombardy_positives_symptomatics = [path for path in input_paths if ((!occursin("lombardy",path) && (occursin("male", path) || occursin("female", path))) || (occursin("lombardy",path) && (!occursin("symptomatic", path) && !occursin("confirmed",path)) && (occursin("male", path) || occursin("female", path)) )) && !occursin(".gitkeep",path) ] # && !occursin("italy",path)
 const female_male_paths = [path
-                           for path in input_paths
-                           if (occursin("male", path) || occursin("female", path))] #(!occursin("sintomatici", path) && !occursin("positivi",path)) && && !occursin("italy",path) 
+ for path in input_paths
+ if (occursin("male", path) || occursin("female", path))] #(!occursin("sintomatici", path) && !occursin("positivi",path)) && && !occursin("italy",path) 
 #const lombardy_paths = [path for path in input_paths if (occursin("male", path) || occursin("female", path)) && occursin("lombardy",path)]
 #const lombardy_positive_symptomatics_paths = reverse([path for path in input_paths if !occursin("maschi", path) && !occursin("femmine", path) && occursin("lombardia",path) && (occursin("positivi",path) || occursin("sintomatici",path))])
 const total_female_male_paths = length(female_male_paths)
 
 # Store the paths pointing to the csv that were not able to be reduced to a single time series. These will be later attempted to be recovered from the sex-aggregated time series. Since we use multithreading, we instantiate failed_paths_multithread as suggested in https://stackoverflow.com/a/65715547/13110508
 failed_paths_multithread = [String[] for i in 1:Threads.nthreads()]
-reconstructed_csvs = Dict{String, DataFrame}()
+reconstructed_csvs = Dict{String,DataFrame}()
 
 # Multithreaded loop
 # Loop over all sex-disaggregayed paths except the nationals
@@ -69,12 +69,12 @@ for i in eachindex(female_male_paths)   #Threads.@threads
     # Reconstruct the time series
     incidence_dataframe = CSV.read(input_path, DataFrame)
     initial_conditions_dataframe = CSV.read(joinpath(path_to_initial_conditions,
-                                                     output_name), DataFrame)
+            output_name), DataFrame)
     reconstructed_df::DataFrame = DataFrame()
     try
         reconstructed_df = unroll_iss_infn(incidence_dataframe, n₋, n₊, nothing;
-                                           initial_conditions_dataframe = initial_conditions_dataframe,
-                                           skip_lines = skip_lines)
+            initial_conditions_dataframe = initial_conditions_dataframe,
+            skip_lines = skip_lines)
         push!(reconstructed_csvs, output_name => reconstructed_df)
         #println("saving to $(joinpath(output_files_dir_path,output_name))")
         #CSV.write(joinpath( raw"E:\GitHub\COVID19-Italy-Integrated-Surveillance-Data\3_output\data",output_name), reconstructed_df)
@@ -104,12 +104,14 @@ const failed_paths = vcat(failed_paths_multithread...)
 # ,"./2_input/daily_incidences_by_age_date_sex_region\\iss_age_date_lombardy_symptomatic_male.csv"
 # ]
 
-reconstructed_h_csvs = Dict{String, DataFrame}()
+reconstructed_h_csvs = Dict{String,DataFrame}()
 # Attempt unrollign of sex-aggregated time series for the datasets that couldn't be brought back to a single time series
 ## Aggregate paths by sex
-sex_aggregated_paths = unique([multiple_string_replace(failed_path,
-                                                       ("_male" => "", "_female" => ""))
-                               for failed_path in failed_paths])
+sex_aggregated_paths = unique([
+    multiple_string_replace(failed_path,
+        ("_male" => "", "_female" => ""))
+    for failed_path in failed_paths
+])
 ## Compute total sex-aggregated paths to be unrolled
 const total_sex_aggregated_paths = length(sex_aggregated_paths)
 ## Loop over the sex aggregated paths
@@ -120,11 +122,16 @@ for i in eachindex(sex_aggregated_paths) #Threads.@threads
     println("\nUnrolling $output_name ( $i \\ $total_sex_aggregated_paths) ...")
     # Load horizontal chack (if it exists)
 
-    horizontal_check_cases::Union{Nothing, Vector{Int64}} = nothing
+    horizontal_check_cases::Union{Nothing,Vector{Int64}} = nothing
     try
-        horizontal_check_cases = CSV.read(joinpath(region_incidences_dir,
-                                                   get_aggregated_dataframe_name_from_unaggragated_dataframe(output_name)),
-                                          DataFrame)[!, "incidence"][(1 + skip_lines):end]
+        horizontal_check_cases = CSV.read(
+            joinpath(region_incidences_dir,
+                get_aggregated_dataframe_name_from_unaggragated_dataframe(output_name),
+            ),
+            DataFrame)[
+            !,
+            "incidence",
+        ][(1+skip_lines):end]
 
         println("Horizontal check series found")
     catch e
@@ -135,21 +142,25 @@ for i in eachindex(sex_aggregated_paths) #Threads.@threads
     female_output_name = split(output_name, ".")[1] * "_female.csv"
     male_output_name = split(output_name, ".")[1] * "_male.csv"
     initial_conditions_female = CSV.read(joinpath(path_to_initial_conditions,
-                                                  female_output_name), DataFrame)
+            female_output_name), DataFrame)
     initial_conditions_male = CSV.read(joinpath(path_to_initial_conditions,
-                                                male_output_name), DataFrame)
-    initial_conditions_dataframe = DataFrame(Dict(col => initial_conditions_female[!,
-                                                                                   col] .+
-                                                         initial_conditions_male[!, col]
-                                                  for col in names(initial_conditions_female)
-                                                  if col ∉ ["date"]))
+            male_output_name), DataFrame)
+    initial_conditions_dataframe = DataFrame(
+        Dict(
+            col => initial_conditions_female[!,
+                col] .+
+                   initial_conditions_male[!, col]
+            for col in names(initial_conditions_female)
+            if col ∉ ["date"]
+        ),
+    )
     println(initial_conditions_dataframe, "\n")
     reconstructed_df::DataFrame = DataFrame()
     try
         reconstructed_df = unroll_iss_infn(sex_aggregated_dataframe, n₋, n₊,
-                                           horizontal_check_cases;
-                                           initial_conditions_dataframe = initial_conditions_dataframe,
-                                           skip_lines = skip_lines)
+            horizontal_check_cases;
+            initial_conditions_dataframe = initial_conditions_dataframe,
+            skip_lines = skip_lines)
         push!(reconstructed_h_csvs, output_name => reconstructed_df)
         #save_dataframe_to_csv(reconstructed_df,output_files_dir_path,output_name)
     catch e
@@ -166,29 +177,31 @@ end
 # Tidy the dataset to satisfy https://github.com/epiforecasts/covidregionaldata/issues/463#issuecomment-1066127594
 ## Translated names of regions
 const regions_italy_names = Dict("abruzzo" => "Abruzzo", "aosta_valley" => "Valle d'Aosta",
-                                 "apulia" => "Puglia", "basilicata" => "Basilicata",
-                                 "calabria" => "Calabria", "campania" => "Campania",
-                                 "emilia_romagna" => "Emilia-Romagna",
-                                 "friuli_venice_giulia" => "Friuli Venezia Giulia",
-                                 "lazio" => "Lazio", "liguria" => "Liguria",
-                                 "lombardy" => "Lombardia", "marches" => "Marche",
-                                 "molise" => "Molise", "pa_bolzano" => "P.A. Bolzano",
-                                 "pa_trento" => "P.A. Trento", "piedmont" => "Piemonte",
-                                 "sardinia" => "Sardegna", "sicily" => "Sicilia",
-                                 "trentino_alto_adige" => "Trentino-Alto Adige",
-                                 "tuscany" => "Toscana", "umbria" => "Umbria",
-                                 "veneto" => "Veneto", "italy" => "Italia")
+    "apulia" => "Puglia", "basilicata" => "Basilicata",
+    "calabria" => "Calabria", "campania" => "Campania",
+    "emilia_romagna" => "Emilia-Romagna",
+    "friuli_venice_giulia" => "Friuli Venezia Giulia",
+    "lazio" => "Lazio", "liguria" => "Liguria",
+    "lombardy" => "Lombardia", "marches" => "Marche",
+    "molise" => "Molise", "pa_bolzano" => "P.A. Bolzano",
+    "pa_trento" => "P.A. Trento", "piedmont" => "Piemonte",
+    "sardinia" => "Sardegna", "sicily" => "Sicilia",
+    "trentino_alto_adige" => "Trentino-Alto Adige",
+    "tuscany" => "Toscana", "umbria" => "Umbria",
+    "veneto" => "Veneto", "italy" => "Italia")
 ## Output dataframe
 const tidy_dataframe = get_tidy_dataframe(reconstructed_csvs, regions_italy_names)
 
 ## Save tidied dataframe
 save_dataframe_to_csv(tidy_dataframe, "epiforecasts_covidregionaldata",
-                      "COVID19-Italy-Integrated-Surveillance-Data.csv")
+    "COVID19-Italy-Integrated-Surveillance-Data.csv")
 
 # Paths to outputted .csvs with OS-specific file separators
-const output_paths = [replace(path, "/" => os_separator)
-                      for path in readdir(output_files_dir_path; join = true)
-                      if !occursin(".gitkeep", path)]
+const output_paths = [
+    replace(path, "/" => os_separator)
+    for path in readdir(output_files_dir_path; join = true)
+    if !occursin(".gitkeep", path)
+]
 
 ## Plot each unrolled csv toghether with averaged data
 const output_plots_dir_path = "3_output/figures/"
@@ -230,31 +243,32 @@ for output_path in output_paths
     for (col, color) in zip(names(female_out_df[!, Not("date")]), palette(:tab20))
         subplot_title = multiple_string_replace(col, ("_+" => "+", "_" => "-"))
         col_sym = Symbol(col)
-        aggregated_column = female_out_df[in.(female_out_df.date, Ref(intersect_dates_out)),
-                                          col] .+
-                            male_out_df[in.(male_out_df.date, Ref(intersect_dates_out)),
-                                        col]
+        aggregated_column =
+            female_out_df[in.(female_out_df.date, Ref(intersect_dates_out)),
+                col] .+
+            male_out_df[in.(male_out_df.date, Ref(intersect_dates_out)),
+                col]
         @eval $sex_aggregated_out_df.$col_sym = $aggregated_column
         p = plot(title = subplot_title, size = (2500, 1500), legend = :topleft)
         plot!(intersect_dates_out, eval(:($sex_aggregated_out_df.$col)),
-              label = "Reconstructed Series", seriestype = :scatter, color = color,
-              markerstrokewidth = 0.3, fillalpha = 0.1) #xrotation=45  
+            label = "Reconstructed Series", seriestype = :scatter, color = color,
+            markerstrokewidth = 0.3, fillalpha = 0.1) #xrotation=45  
         plot!(intersect_dates_inp,
-              female_inp_df[in.(female_inp_df.date, Ref(intersect_dates_inp)), col] .+
-              male_inp_df[in.(male_inp_df.date, Ref(intersect_dates_inp)), col],
-              label = "Moving Average", color = color, lw = 4)
+            female_inp_df[in.(female_inp_df.date, Ref(intersect_dates_inp)), col] .+
+            male_inp_df[in.(male_inp_df.date, Ref(intersect_dates_inp)), col],
+            label = "Moving Average", color = color, lw = 4)
         push!(plots, p)
     end
     grid = plot(plots..., layout = (11, 1),
-                plot_title = multiple_string_replace(output_female_name,
-                                                     ("_female" => "", ".csv" => "")))#dpi = 100
+        plot_title = multiple_string_replace(output_female_name,
+            ("_female" => "", ".csv" => "")))#dpi = 100
     savefig(grid,
-            joinpath(output_plots_dir_path,
-                     multiple_string_replace(output_female_name,
-                                             ("_female" => "", ".csv" => ""))))
+        joinpath(output_plots_dir_path,
+            multiple_string_replace(output_female_name,
+                ("_female" => "", ".csv" => ""))))
     # Save the sex_aggregated_dataframe
     save_dataframe_to_csv(sex_aggregated_out_df, output_files_dir_path,
-                          replace(output_female_name, "_female" => ""))
+        replace(output_female_name, "_female" => ""))
 end
 
 ## using over80 data for a stratified (over and under 80y) horizontal check
