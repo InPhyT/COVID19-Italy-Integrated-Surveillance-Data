@@ -59,7 +59,7 @@ failed_paths_multithread = [String[] for i in 1:Threads.nthreads()]
 reconstructed_csvs = Dict{String,DataFrame}()
 
 # Multithreaded loop
-# Loop over all sex-disaggregayed paths except the nationals
+# Loop over all sex-disaggregated paths except the nationals
 include("utilities.jl")
 for i in eachindex(female_male_paths)   #Threads.@threads 
     input_path = female_male_paths[i]
@@ -105,7 +105,7 @@ const failed_paths = vcat(failed_paths_multithread...)
 # ]
 
 reconstructed_h_csvs = Dict{String,DataFrame}()
-# Attempt unrollign of sex-aggregated time series for the datasets that couldn't be brought back to a single time series
+# Attempt unrolling of sex-aggregated time series for the datasets that couldn't be brought back to a single time series
 ## Aggregate paths by sex
 sex_aggregated_paths = unique([
     multiple_string_replace(failed_path,
@@ -203,12 +203,12 @@ const output_paths = [
     if !occursin(".gitkeep", path)
 ]
 
-## Plot each unrolled csv toghether with averaged data
+## Plot each unrolled csv together with averaged data
 const output_plots_dir_path = "3_output/figures/"
 # Loop over all outputted paths
 for output_path in output_paths
 
-    # Discard males sincefor every female path we also consider the corresponding male
+    # Discard males since for every female path we also consider the corresponding male
     if occursin("_male", output_path)
         continue
     end
@@ -233,7 +233,7 @@ for output_path in output_paths
     # Get maximum of minima dates, and minimum of maxima
     intersect_dates_inp = intersect(female_inp_df[!, "date"], male_inp_df[!, "date"])
 
-    # Get dates common to inout and output. These will be the dates used for plotting
+    # Get dates common to input and output. These will be the dates used for plotting
     dates = intersect(intersect_dates_out, intersect_dates_inp)
 
     # Subplots
@@ -276,7 +276,7 @@ end
 # averaged_df = CSV.read( input_path, DataFrame)
 
 ## load the corresponding over80 dataset
-# horizontal_check_cases_df = CSV.read( joinpath(over80_horizontal_checks_dir_path, get_over80_aggregated_dataframe_name_from_unaggragated_dataframe(output_name)), DataFrame) 
+# horizontal_check_cases_df = CSV.read( joinpath(over80_horizontal_checks_dir_path, get_over80_aggregated_dataframe_name_from_unaggregated_dataframe(output_name)), DataFrame) 
 ## sort such  dataframe by date
 # sort!(horizontal_check_cases_df, [:data])
 

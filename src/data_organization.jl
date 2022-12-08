@@ -34,10 +34,12 @@ const regular_infix_folderName_associations_ita = Dict(
     ] => "distribuzione_della_durata_del_ricovero_prima_del_decesso__deceased_hospital_length_of_stay_distribution_by_region",
     [
         "_age_date",
-    ] => "nuovi_casi_giornalieri_per_fasce_di_età_daily_incidences_by_age_date_sex_region_rolling_mean",
+    ] => "nuovi_casi_giornalieri_per_fasce_di_età__daily_incidences_by_age_date_sex_region_rolling_mean",
     ["_opsan"] => "operatori_sanitari__daily_incidences_medical_staff_by_region",
     ["_rt"] => "tasso_di_contagio_Rt__daily_Rt_by_region_province_positive_symptomatic",
-    ["_80plus"] => "ultra_ottantenni__daily_incidences_over80_by_region")
+    ["_80plus"] => "ultra_ottantenni__daily_incidences_over80_by_region", 
+    ["_vax_inc"] => "incidenza_giornaliera_vax_età__daily_incidence_by_vax_age", 
+    ["_vax"] => "incidenza_giornaliera_vax__daily_incidence_by_vax")
 
 const regular_infix_folderName_associations_en =
     Dict(["_dt2"] => "temporal_distribution_of_time_delay_from_hospitalization_to_death",
@@ -48,7 +50,9 @@ const regular_infix_folderName_associations_en =
         ["_age_date"] => "daily_incidences_by_region_sex_age",
         ["_opsan"] => "daily_incidences_healthcare_workers_by_region",
         ["_rt"] => "daily_Rt_by_region_province_status",
-        ["_80plus"] => "daily_incidences_over80_by_region")
+        ["_80plus"] => "daily_incidences_over80_by_region", 
+        ["_vax_inc"] => "daily_incidence_by_vax_age", 
+        ["_vax"] => "daily_incidence_by_vax")
 
 # Regular infixes, that is, all infixes except "bydate" and "byage"
 const regular_infixes = collect(keys(regular_infix_folderName_associations_en))
@@ -91,11 +95,18 @@ const provinces_translations = Dict("genova" => "genoa", "milano" => "milan",
     "torino" => "turin", "venezia" => "venice")
 
 const further_translations =
-    Dict("positivi" => "confirmed", "sintomatici" => "symptomatic",
-        "ricoveri" => "hospitalizations",
-        "terapia_intensiva" => "intensive_care",
-        "deceduti" => "deceased", "quantili" => "quantiles",
-        "eta" => "age", "maschi" => "male", "femmine" => "female")
+    Dict("positivi" => "confirmed", 
+         "sintomatici" => "symptomatic",
+         "ricoveri" => "hospitalizations",
+         "terapia_intensiva" => "intensive_care",
+         "deceduti" => "deceased", 
+         "vaccinati" => "vaccinated",
+         "non vaccinati" => "unvaccinated",
+         "altri" => "others",  
+         "quantili" => "quantiles",
+         "eta" => "age", 
+         "maschi" => "male", 
+         "femmine" => "female")
 
 const translations = merge(regions_italy_names_translations, provinces_translations,
     further_translations)
@@ -194,7 +205,10 @@ const column_names_translations = Dict(
     # relative_overall_prevalences_distributed_by_sex_age
     "età" => "age",
     # temporal_distribution_of_time_delay_from_hospitalization_to_death
-    "DATADECESSO" => "date")
+    "DATADECESSO" => "date", 
+    #iss_vax_inc_
+    "vaccinati" => "vaccinated", 
+    "non vaccinati" => "unvaccinated")
 
 # English age classes
 const age_classes_translations = Dict("0-5 anni" => "0_5", "6-12 anni" => "6_12",
@@ -202,7 +216,7 @@ const age_classes_translations = Dict("0-5 anni" => "0_5", "6-12 anni" => "6_12"
     "30-39 anni" => "30_39", "40-49 anni" => "40_49",
     "50-59 anni" => "50_59", "60-69 anni" => "60_69",
     "70-79 anni" => "70_79", "80-89 anni" => "80_89",
-    "≥90 anni" => "90_+")
+    "≥90 anni"   => "90_+")
 
 # Fill folder sructure with files from ./archive.
 ## Get all file names

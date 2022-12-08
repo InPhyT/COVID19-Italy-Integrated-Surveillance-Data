@@ -1,4 +1,3 @@
-
 """
     multiple_string_replace(str::String, replacements::Dict{String,String})
 
@@ -118,7 +117,7 @@ function unroll_iss_infn(iss_infn_dataframe::DataFrame, n₋::Int64, n₊::Int64
         },
     }[]
 
-    # If ther are more possibilities for some age class, then run the horizontal check
+    # If there are more possibilities for some age class, then run the horizontal check
     if unique(length.(reconstructed_incidences)) != [1] &&
        !isnothing(horizontal_check_cases)
         println(

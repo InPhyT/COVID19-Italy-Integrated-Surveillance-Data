@@ -2,7 +2,7 @@
 # For more information about workflows, see the GitHub documentation: https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
 
 # Name of this workflow
-name: update
+name: Update Data
 
 # Choose when the workflow should run
 ## Run the workflow at every push
@@ -12,11 +12,11 @@ name: update
 #       - 'main'
 ## Run the workflow every 6 minutes (see https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#scheduled-events)
 on:
- schedule:
-   # * is a special character in YAML so you have to quote this string
-   - cron:  '59 22 * * 3'
+  schedule:
+  # * is a special character in YAML so you have to quote this string
+    - cron:  '59 22 * * 3'
    # Restrict execution to main branch
-  #  - branches: main
+   #  - branches: main
 # Workflows are made of concurrent jobs, and every job is made of sequential steps. Steps may invoke actions.
 jobs:
   # Name of the job
@@ -27,17 +27,16 @@ jobs:
 
       # Checkout (copy locally) the repository main branch
       - name: Checkout repository content
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
-
-
+          
       # Install python and Julia. Run scripts.
-      ## Setup (install) Python 3.10.0
+      ## Setup (install) Python 3.10
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.10.0'
+          python-version: '3.10'
       ## Install Python packages. Note that matplotlib is needed by PyPlot, which is a Julia package we install below.
       - name: Install Python packages
         run: |
@@ -50,9 +49,9 @@ jobs:
           python src/download_extract.py
       ## Setup Julia 1.6.4
       - name: "Set up Julia"
-        uses: julia-actions/setup-julia@v1.6.0
+        uses: julia-actions/setup-julia@v1.8
         with:
-          version: "1.7.2"
+          version: "1.8"
       ## Execute Julia files
       # julia src/data_organization.jl
       # julia src/main.jl
