@@ -6,10 +6,10 @@ name: Update Data
 
 # Choose when the workflow should run
 ## Run the workflow at every push
-# on: 
-#   push:
-#     branches:
-#       - 'main'
+on: 
+  push:
+    branches:
+      - 'main'
 ## Run the workflow every 6 minutes (see https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#scheduled-events)
 on:
   schedule:
