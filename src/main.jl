@@ -45,7 +45,7 @@ const os_separator = Base.Filesystem.path_separator
 # const path_to_processed_ground_truths = "./processed_ground_truths"
 
 const input_paths = readdir(input_dir_path; join = true, sort = false)
-# As per methodology, get all paths that contain "male" and "female", except those regarding italy (all incidences) or positive and symptomatic incidences in lombardy. These we know to cause problems, Those that can't be unqiuely determined are saved in a failed array, later used to try the corresponding non-sex stratified ones.
+# As per methodology, get all paths that contain "male" and "female", except those regarding italy (all incidences) or positive and symptomatic incidences in lombardy. These we know to cause problems, Those that can't be uniquely determined are saved in a failed array, later used to try the corresponding non-sex stratified ones.
 # const female_male_paths_without_lombardy_positives_symptomatics = [path for path in input_paths if ((!occursin("lombardy",path) && (occursin("male", path) || occursin("female", path))) || (occursin("lombardy",path) && (!occursin("symptomatic", path) && !occursin("confirmed",path)) && (occursin("male", path) || occursin("female", path)) )) && !occursin(".gitkeep",path) ] # && !occursin("italy",path)
 const female_male_paths = [path
  for path in input_paths
@@ -120,7 +120,7 @@ for i in eachindex(sex_aggregated_paths) #Threads.@threads
     # Name to be given to the output file
     output_name = string(split(sex_aggregated_path, os_separator)[end])
     println("\nUnrolling $output_name ( $i \\ $total_sex_aggregated_paths) ...")
-    # Load horizontal chack (if it exists)
+    # Load horizontal check (if it exists)
 
     horizontal_check_cases::Union{Nothing,Vector{Int64}} = nothing
     try

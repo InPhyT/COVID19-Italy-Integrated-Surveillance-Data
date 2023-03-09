@@ -61,9 +61,6 @@ jobs:
           julia src/main.jl
 
 
-
-          
-
       # Commit and push
       ## Commit outputs
       - name: Commit files
@@ -78,7 +75,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main  
-
 
       # Get previous release's tag, increment its major version and use it to make a new release. New release has date and time in its body.
       ## Get current date time (to be used in the release's body)

@@ -218,7 +218,7 @@ const age_classes_translations = Dict("0-5 anni" => "0_5", "6-12 anni" => "6_12"
     "70-79 anni" => "70_79", "80-89 anni" => "80_89",
     "≥90 anni"   => "90_+")
 
-# Fill folder sructure with files from ./archive.
+# Fill folder structure with files from ./archive.
 ## Get all file names
 const archive_folder = "./0_archive"
 matches = Int64[]
@@ -248,9 +248,9 @@ for csv_path in readdir(archive_folder; join = true)
          for ita_age_class in df.age_class]
     end
 
-    # Deal with excepional cases later
+    # Deal with exceptional cases later
     for regular_infix in regular_infixes
-        # If infix occurs in the name of csv, then copy it to the corresponnding folder
+        # If infix occurs in the name of csv, then copy it to the corresponding folder
         if all(occursin.(regular_infix, Ref(csv_name)))
             CSV.write(
                 joinpath(folder_structure_root_path,
@@ -261,7 +261,7 @@ for csv_path in readdir(archive_folder; join = true)
         end
     end
 
-    # Exceptional case: "bydate". csvs with infix may have regional stratification or provice stratification with rolling mean
+    # Exceptional case: "bydate". csvs with infix may have regional stratification or province stratification with rolling mean
     if occursin("_bydate", csv_name) && any(occursin.(regions_italy_names, Ref(csv_name)))
         CSV.write(
             joinpath(folder_structure_root_path, "daily_incidences_by_region",
