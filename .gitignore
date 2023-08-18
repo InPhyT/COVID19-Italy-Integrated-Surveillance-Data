@@ -2,3 +2,4 @@
 /raw_initial_conditions/
 /processed_ground_truths/
 .~lock**
+/python_env/
