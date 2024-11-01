@@ -1,103 +1,97 @@
-# This workflow file is responsible for downloading the .tar.gzip file from https://covid19.infn.it/, running the scripts that decompress and process it, committing the results and creating a release.
-# For more information about workflows, see the GitHub documentation: https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
+# Workflow to automate data updates from https://covid19.infn.it/
+# This workflow downloads the .tar.gzip data file, decompresses and processes it, commits the results to the repository, and creates a new release.
+# For detailed information about workflows, see the GitHub documentation: https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
 
-# Name of this workflow
+# Workflow name
 name: Update Data
 
-# Choose when the workflow should run
-## Run the workflow at every push
+# Define triggers for the workflow
 on: 
   push:
     branches:
-      - 'main'
-## Run the workflow every 6 minutes (see https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#scheduled-events)
-# on:
-#   schedule:
-#   # * is a special character in YAML so you have to quote this string
-#     - cron:  '59 22 * * 3'
-#    # Restrict execution to main branch
-#    #  - branches: main
-# Workflows are made of concurrent jobs, and every job is made of sequential steps. Steps may invoke actions.
-jobs:
-  # Name of the job
-  build:
-    # Run the job on a ubuntu machine
-    runs-on: ubuntu-latest
-    steps:
+      - 'main' # Run the workflow on every push to the 'main' branch
+  # Uncomment the following to run the workflow on a schedule (currently set to every Wednesday at 10:59 PM UTC)
+  # schedule:
+  #   - cron: '59 22 * * 3'
 
-      # Checkout (copy locally) the repository main branch
+# Workflows are structured as jobs, and each job includes sequential steps
+jobs:
+  # Job to download, process, and update data
+  build:
+    # Specify the environment for the job
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout the repository on the 'main' branch
       - name: Checkout repository content
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
+          fetch-depth: 0 # Ensure all commits and tags are fetched to enable version history access
           
-      # Install python and Julia. Run scripts.
-      ## Setup (install) Python 3.10
+      # Step 2: Set up Python environment and required dependencies
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-      ## Install Python packages. Note that matplotlib is needed by PyPlot, which is a Julia package we install below.
+          python-version: '3.10' # Use Python version 3.10
+          
       - name: Install Python packages
         run: |
-          python -m pip install --upgrade pip
-          pip install requests
-          pip install matplotlib    
-      ## Execute download_extract.py
+          python -m pip install --upgrade pip # Upgrade pip
+          pip install requests # Required for HTTP requests in data download script
+          pip install matplotlib # Required by PyPlot in Julia
+      
+      # Step 3: Run the Python script to download and extract data
       - name: Execute download_extract.py 
         run: |
           python src/download_extract.py
-      ## Setup Julia 1.6.4
-      - name: "Set up Julia"
+      
+      # Step 4: Set up Julia environment
+      - name: Set up Julia
         uses: julia-actions/setup-julia@v2.4
         with:
-          version: "1.8"
-      ## Execute Julia files
-      # julia src/data_organization.jl
-      # julia src/main.jl
+          version: "1.8" # Use Julia version 1.8
+      
+      # Step 5: Run Julia scripts for data processing
       - name: Execute data_organization.jl and main.jl
         run: |
           julia src/data_organization.jl
           julia src/main.jl
 
-
-      # Commit and push
-      ## Commit outputs
+      # Step 6: Commit and push updated data to the repository
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
           git commit -m "update data" -a
-      ## Push 
+      
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main  
 
-      # Get previous release's tag, increment its major version and use it to make a new release. New release has date and time in its body.
-      ## Get current date time (to be used in the release's body)
+      # Step 7: Create a new release with updated data
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      ## Get tag of the previous version
-      - name: 'Get Previous tag'
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')" # Capture the current date for release description
+      
+      - name: Get Previous tag
         id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        uses: WyriHaximus/github-action-get-previous-tag@v1
         with:
-          fallback: v1.0.0 # Optional fallback tag to use when no tag can be found
-      ## Increase previous tag and save it
-      - name: 'Get next major version'
+          fallback: v1.0.0 # Fallback to 'v1.0.0' if no previous tags exist
+
+      - name: Get next major version
         id: semvers
-        uses: "WyriHaximus/github-action-next-semvers@v1"
+        uses: WyriHaximus/github-action-next-semvers@v1
         with:
-          version: ${{ steps.previoustag.outputs.tag }}
-      ## Create new release
-      - name: Release
+          version: ${{ steps.previoustag.outputs.tag }} # Increment the previous tag to the next major version
+
+      - name: Create release
         id: release 
         uses: ncipollo/release-action@v1
         with:
-          body: "Data updated as of ${{ steps.date.outputs.date }}"
-          tag: ${{ steps.semvers.outputs.v_major }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          body: "Data updated as of ${{ steps.date.outputs.date }}" # Release description with date
+          tag: ${{ steps.semvers.outputs.v_major }} # New version tag
+          token: ${{ secrets.GITHUB_TOKEN }} # Authorization token
