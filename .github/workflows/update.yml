@@ -34,7 +34,7 @@ jobs:
       # Install python and Julia. Run scripts.
       ## Setup (install) Python 3.10
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
       ## Install Python packages. Note that matplotlib is needed by PyPlot, which is a Julia package we install below.
