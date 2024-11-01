@@ -13,6 +13,7 @@ on:
   # Uncomment the following to run the workflow on a schedule (currently set to every Wednesday at 10:59 PM UTC)
   # schedule:
   #   - cron: '59 22 * * 3'
+  workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
 
 # Workflows are structured as jobs, and each job includes sequential steps
 jobs:
