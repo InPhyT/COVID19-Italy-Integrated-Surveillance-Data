@@ -128,7 +128,6 @@ Se usate questi dati nel vostro lavoro siete pregati di citare questo repository
          abstract     = {COVID-19 integrated surveillance data provided by the Italian Institute of Health and processed via UnrollingAverages.jl to remove the weekly moving averages.},
          author       = {Monticone, Pietro and Moroni, Claudio},
          doi          = {10.5281/zenodo.5748142},
-         institution  = {University of Turin (UniTO)},
          keywords     = {Data, Data Analysis, Statistics, Time Series, Time Series Analysis, Epidemiological Data, Surveillance, Surveillance Data, Incidence Data, Open Data, Epidemiology, Mathematical Epidemiology, Computational Epidemiology, COVID-19, SARS-CoV-2, Italy, COVID-19 Data, SARS-CoV-2 Data},
          license      = {CC BY-SA 4.0},
          organization = {Interdisciplinary Physics Team (InPhyT)},
