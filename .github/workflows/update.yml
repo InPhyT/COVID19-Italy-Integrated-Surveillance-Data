@@ -49,7 +49,7 @@ jobs:
           python src/download_extract.py
       ## Setup Julia 1.6.4
       - name: "Set up Julia"
-        uses: julia-actions/setup-julia@v1.8
+        uses: julia-actions/setup-julia@v2.4
         with:
           version: "1.8"
       ## Execute Julia files
