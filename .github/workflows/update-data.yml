@@ -48,7 +48,7 @@ jobs:
       
       # Step 4: Set up Julia environment
       - name: Set up Julia
-        uses: julia-actions/setup-julia@v2.4
+        uses: julia-actions/setup-julia@v2.6
         with:
           version: "1.8" # Use Julia version 1.8
       
