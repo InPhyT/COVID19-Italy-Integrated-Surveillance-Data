@@ -25,7 +25,7 @@ jobs:
     steps:
       # Step 1: Checkout the repository on the 'main' branch
       - name: Checkout repository content
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Ensure all commits and tags are fetched to enable version history access
           
