@@ -79,7 +79,7 @@ jobs:
       
       - name: Get Previous tag
         id: previoustag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
+        uses: WyriHaximus/github-action-get-previous-tag@v2
         with:
           fallback: v1.0.0 # Fallback to 'v1.0.0' if no previous tags exist
 
